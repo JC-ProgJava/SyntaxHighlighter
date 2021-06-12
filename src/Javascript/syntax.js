@@ -88,14 +88,14 @@ class Token {
 }
 
 class Tokenizer {
-  line = 1;
-  col = 0;
-  start = 0;
-  current = 0;
-  tokens = [];
-  sourceCode = "";
-  keywords = [];
   constructor() {
+    this.line = 1;
+    this.col = 0;
+    this.start = 0;
+    this.current = 0;
+    this.tokens = [];
+    this.sourceCode = "";
+    this.keywords = [];
     this.keywords.push("abstract");
     this.keywords.push("assert");
     this.keywords.push("boolean");
@@ -193,8 +193,8 @@ class Tokenizer {
   multilineString() {
     while (!this.isAtEnd()) {
       if (
-        sourceCode.charAt(this.current - 1) != "\\" &&
-        sourceCode.charAt(this.current) == '"' &&
+        this.sourceCode.charAt(this.current - 1) != "\\" &&
+        this.sourceCode.charAt(this.current) == '"' &&
         this.peek() == '"' &&
         this.peekNext() == '"'
       ) {
@@ -238,7 +238,7 @@ class Tokenizer {
   character() {
     while (
       !this.isAtEnd() &&
-      (this.peek() != "'" || sourceCode.charAt(this.current) == "\\")
+      (this.peek() != "'" || this.sourceCode.charAt(this.current) == "\\")
     ) {
       this.col++;
       this.current++;
@@ -248,7 +248,7 @@ class Tokenizer {
   string() {
     while (
       !this.isAtEnd() &&
-      (this.peek() != '"' || sourceCode.charAt(this.current) == "\\")
+      (this.peek() != '"' || this.sourceCode.charAt(this.current) == "\\")
     ) {
       this.col++;
       this.current++;
@@ -346,7 +346,7 @@ class Tokenizer {
               );
               break;
             case "@":
-              annotation();
+              this.annotation();
               this.current++;
               this.tokens.push(
                 new Token(
@@ -360,7 +360,7 @@ class Tokenizer {
             case '"':
               // Supports multiline strings
               if (this.peek() == '"' && this.peekNext() == '"') {
-                multilineString();
+                this.multilineString();
                 this.current++;
                 this.tokens.push(
                   new Token(
@@ -371,7 +371,7 @@ class Tokenizer {
                   )
                 );
               } else {
-                string();
+                this.string();
                 this.current++;
                 this.tokens.push(
                   new Token(
@@ -384,7 +384,7 @@ class Tokenizer {
               }
               break;
             case "'":
-              character();
+              this.character();
               this.current++;
               this.tokens.push(
                 new Token(
@@ -563,7 +563,7 @@ class Tokenizer {
 var code = document.getElementsByTagName("code");
 for (var i = 0; i < code.length; i++) {
   var tokensList = new Tokenizer().tokenize(code[i].innerText);
-  var parser = new Parser(this.tokensList);
+  var parser = new Parser(tokensList);
   var output = parser.parse();
   code[i].innerHTML = output;
 }

@@ -10,6 +10,7 @@ public class SyntaxHighlighter {
     System.out.print("Import source filepath: ");
     Scanner input = new Scanner(System.in);
     String filepath = input.nextLine();
+    long start = System.currentTimeMillis();
     try {
       String code = new String(Files.readAllBytes(Path.of(filepath)));
       ArrayList<Token> tokens = new ArrayList<>(new Tokenizer().tokenize(code));
@@ -43,7 +44,7 @@ public class SyntaxHighlighter {
                       </body>
                       </html>
                       """;
-      System.out.print(codeHTMLAndCSS);
+      //System.out.print(codeHTMLAndCSS);
 
       FileWriter writer = new FileWriter("index.html");
       writer.write(codeHTMLAndCSS);
@@ -51,5 +52,7 @@ public class SyntaxHighlighter {
     } catch (IOException e) {
       System.err.println("Could not read filepath '" + filepath + "'.");
     }
+    long stop = System.currentTimeMillis();
+    System.out.println((stop - start) / 1000.0 + " seconds elapsed.");
   }
 }

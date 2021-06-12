@@ -1,0 +1,20 @@
+package com.example;
+import java.util.Scanner;
+import java.file.IO; // Fake imports with capitalization.
+
+/*
+    Multi-line comment test
+*/
+
+/**
+ * JAVADOC TEST
+ */
+
+public static void main(String[] args) {
+    String test = """
+        Hello World!
+        This is a multi-line string!
+    """;
+    String enumedString = String.MAX;
+    ANOTHER_ENUM;
+}

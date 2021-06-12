@@ -8,7 +8,6 @@ public class Parser {
 
   public Parser(ArrayList<Token> tokens) {
     this.tokens = tokens;
-
   }
 
   public String[] parse() {
@@ -62,11 +61,19 @@ public class Parser {
             .constant {
               color: #660E7A;
             }
+                        
+            .javadoc {
+              color: #bf8f1d;
+            }
+                        
+            .annotation {
+              color: #808000;
+            }
             """;
     outCodeHTML += "<code>";
     for (Token token : tokens) {
       switch (token.type.toString()) {
-        case "KEYWORD", "IDENTIFIER", "NUMBER", "STRING", "IMPORTNAME", "HEADDATATYPE", "OTHERPUNCTUATION" -> {
+        case "KEYWORD", "IDENTIFIER", "NUMBER", "STRING", "IMPORTNAME", "HEADDATATYPE", "OTHERPUNCTUATION", "JAVADOC", "ANNOTATION", "CONSTANT" -> {
           outCodeHTML += "<span class=\"" + token.type.toString().toLowerCase() + "\">" + cleanse(token.text) + "</span>";
           outPlain += token.text;
         }

@@ -6,8 +6,10 @@ public enum TokenType {
   IMPORTNAME, // the name after 'import' (i.e., java.util.Scanner)
   HEADDATATYPE, // the name of a class who is being insantiated (i.e., BigInteger)
   CONSTANT, // an identifier that is in uppercase (and may contain '_')
-  OTHERPUNCTUATION
+  OTHERPUNCTUATION,
   // i.e., ';', '()', '{}', '<>', '[]', ',', '*', '='
   //       '+', '-', '/', '%', '!', '~', '&', '|'
   //       '?', ':', '^', '.', '''
+  JAVADOC, // javadoc comments (highlighted in orange by default)
+  ANNOTATION // annotations (i.e., @Override)
 }

@@ -1,27 +1,27 @@
 const TokenType = Object.freeze({
-    IDENTIFIER: "IDENTIFIER",
-    KEYWORD: "KEYWORD",
-    NUMBER: "NUMBER",
-    STRING: "STRING",
-    SPACE: "SPACE",
-    NEWLINE: "NEWLINE",
-    TAB: "TAB",
-    IMPORTNAME: "IMPORTNAME",
-    HEADDATATYPE: "HEADDATATYPE",
-    CONSTANT: "CONSTANT",
-    OTHERPUNCTUATION: "OTHERPUNCTUATION",
-    JAVADOC: "JAVADOC",
-    ANNOTATION: "ANNOTATION"
+  IDENTIFIER: "IDENTIFIER",
+  KEYWORD: "KEYWORD",
+  NUMBER: "NUMBER",
+  STRING: "STRING",
+  SPACE: "SPACE",
+  NEWLINE: "NEWLINE",
+  TAB: "TAB",
+  IMPORTNAME: "IMPORTNAME",
+  HEADDATATYPE: "HEADDATATYPE",
+  CONSTANT: "CONSTANT",
+  OTHERPUNCTUATION: "OTHERPUNCTUATION",
+  JAVADOC: "JAVADOC",
+  ANNOTATION: "ANNOTATION",
 });
 
 class Parser {
-constructor (tokens) {
+  constructor(tokens) {
     this.tokens = tokens;
     this.outCodeHTML = "";
     this.outPlain = "";
-}
+  }
 
-parse () {
+  parse() {
     for (let index = 0; index < this.tokens.length; index++) {
       switch (String(this.tokens[index].type)) {
         case "KEYWORD":
@@ -34,49 +34,68 @@ parse () {
         case "JAVADOC":
         case "ANNOTATION":
         case "CONSTANT":
-          this.outCodeHTML += "<span class=\"" + String(this.tokens[index].type).toLowerCase() + "\">" + this.cleanse(this.tokens[index].text) + "</span>";
+          this.outCodeHTML +=
+            '<span class="' +
+            String(this.tokens[index].type).toLowerCase() +
+            '">' +
+            this.cleanse(this.tokens[index].text) +
+            "</span>";
           this.outPlain += this.tokens[index].text;
           break;
         case "NEWLINE":
-          this.outCodeHTML += "<span class=\"" + String(this.tokens[index].type).toLowerCase() + "\"><br /></span>";
+          this.outCodeHTML +=
+            '<span class="' +
+            String(this.tokens[index].type).toLowerCase() +
+            '"><br /></span>';
           this.outPlain += "\n";
           break;
         case "TAB":
-          this.outCodeHTML += "<span class=\"" + String(this.tokens[index].type).toLowerCase() + "\">    </span>";
+          this.outCodeHTML +=
+            '<span class="' +
+            String(this.tokens[index].type).toLowerCase() +
+            '">    </span>';
           this.outPlain += "\t";
           break;
         case "SPACE":
-          this.outCodeHTML += "<span class=\"" + String(this.tokens[index].type).toLowerCase() + "\"> </span>";
+          this.outCodeHTML +=
+            '<span class="' +
+            String(this.tokens[index].type).toLowerCase() +
+            '"> </span>';
           this.outPlain += " ";
           break;
       }
     }
     return this.outCodeHTML;
-}
+  }
 
-cleanse (text) {
-    return text.replaceAll("[&]", "&amp;").replaceAll("[ ]", "&nbsp;").replaceAll("[{]", "&lbrace;").replaceAll("[<]", "&lt;").replaceAll("[>]", "&gt;");
-}
+  cleanse(text) {
+    return text
+      .replaceAll("[&]", "&amp;")
+      .replaceAll("[ ]", "&nbsp;")
+      .replaceAll("[{]", "&lbrace;")
+      .replaceAll("[<]", "&lt;")
+      .replaceAll("[>]", "&gt;");
+  }
 }
 
 class Token {
-constructor (text, line, col, type) {
+  constructor(text, line, col, type) {
     this.text = text;
     this.line = this.line;
     this.col = col;
     this.type = type;
-}
+  }
 }
 
 class Tokenizer {
-line = 1;
-col = 0;
-start = 0;
-current = 0;
-tokens = [];
-sourceCode = "";
-keywords = [];
-constructor () {
+  line = 1;
+  col = 0;
+  start = 0;
+  current = 0;
+  tokens = [];
+  sourceCode = "";
+  keywords = [];
+  constructor() {
     this.keywords.push("abstract");
     this.keywords.push("assert");
     this.keywords.push("boolean");
@@ -142,25 +161,28 @@ constructor () {
     this.keywords.push("false");
     this.keywords.push("null");
     this.keywords.push("System");
-}
+  }
 
-peek() {
+  peek() {
     return this.sourceCode.charAt(this.current + 1);
-}
+  }
 
-isAlphabet(currentChar) {
-    return String(currentChar).match(new RegExp("^[a-zA-Z_$][a-zA-Z_$0-9]*$")) != null;
-}
+  isAlphabet(currentChar) {
+    return (
+      String(currentChar).match(new RegExp("^[a-zA-Z_$][a-zA-Z_$0-9]*$")) !=
+      null
+    );
+  }
 
-isAtEnd() {
+  isAtEnd() {
     return this.current >= this.sourceCode.length;
-}
+  }
 
-annotation() {
+  annotation() {
     while (!this.isAtEnd()) {
-      if (this.peek() == ' ') {
+      if (this.peek() == " ") {
         break;
-      } else if (this.peek() == '\n') {
+      } else if (this.peek() == "\n") {
         this.line++;
       }
       this.col++;
@@ -169,64 +191,75 @@ annotation() {
   }
 
   multilineString() {
-      while (!this.isAtEnd()) {
-        if (sourceCode.charAt(this.current - 1) != '\\' && sourceCode.charAt(this.current) == '"' && this.peek() == '"' && this.peekNext() == '"') {
-          break;
-        } else if (this.peek() == '\n') {
-          this.line++;
-        }
-        this.col++;
-        this.current++;
+    while (!this.isAtEnd()) {
+      if (
+        sourceCode.charAt(this.current - 1) != "\\" &&
+        sourceCode.charAt(this.current) == '"' &&
+        this.peek() == '"' &&
+        this.peekNext() == '"'
+      ) {
+        break;
+      } else if (this.peek() == "\n") {
+        this.line++;
       }
+      this.col++;
+      this.current++;
     }
+  }
 
-    multilineComment() {
-        while (!this.isAtEnd()) {
-          if (this.peek() == '*' && this.peekNext() == '/') {
-            break;
-          } else if (this.peek() == '\n') {
-            this.line++;
-          }
-          this.col++;
-          this.current++;
-        }
-        this.col++;
-        this.current++;
+  multilineComment() {
+    while (!this.isAtEnd()) {
+      if (this.peek() == "*" && this.peekNext() == "/") {
+        break;
+      } else if (this.peek() == "\n") {
+        this.line++;
       }
+      this.col++;
+      this.current++;
+    }
+    this.col++;
+    this.current++;
+  }
 
-      peekNext() {
-          return this.sourceCode.charAt(this.current + 2);
-        }
+  peekNext() {
+    return this.sourceCode.charAt(this.current + 2);
+  }
 
-        isUppercase(text) {
-            return text.match(new RegExp("^[A-Z_$][A-Z_$0-9]*$")) != null;
-          }
-comment() {
-    while (!this.isAtEnd() && this.peek() != '\n') {
+  isUppercase(text) {
+    return text.match(new RegExp("^[A-Z_$][A-Z_$0-9]*$")) != null;
+  }
+  comment() {
+    while (!this.isAtEnd() && this.peek() != "\n") {
       this.col++;
       this.current++;
     }
   }
 
   character() {
-      while (!this.isAtEnd() && (this.peek() != '\'' || sourceCode.charAt(this.current) == '\\')) {
-        this.col++;
-        this.current++;
-      }
+    while (
+      !this.isAtEnd() &&
+      (this.peek() != "'" || sourceCode.charAt(this.current) == "\\")
+    ) {
+      this.col++;
+      this.current++;
     }
+  }
 
-    string() {
-        while (!this.isAtEnd() && (this.peek() != '"' || sourceCode.charAt(this.current) == '\\')) {
-          this.col++;
-          this.current++;
-        }
-      }
+  string() {
+    while (
+      !this.isAtEnd() &&
+      (this.peek() != '"' || sourceCode.charAt(this.current) == "\\")
+    ) {
+      this.col++;
+      this.current++;
+    }
+  }
 
   isNumerical(currentChar) {
-      return String(currentChar).match(new RegExp("[0-9]")) != null;
-    }
+    return String(currentChar).match(new RegExp("[0-9]")) != null;
+  }
 
-tokenize(code) {
+  tokenize(code) {
     this.sourceCode = code;
     while (!this.isAtEnd()) {
       var currentChar = this.sourceCode.charAt(this.current);
@@ -235,10 +268,26 @@ tokenize(code) {
           this.col++;
           this.current++;
         }
-        if (this.keywords.includes(code.substring(this.start, this.current + 1))) {
-          this.tokens.push(new Token(code.substring(this.start, this.current + 1), this.line, this.col, TokenType.KEYWORD));
+        if (
+          this.keywords.includes(code.substring(this.start, this.current + 1))
+        ) {
+          this.tokens.push(
+            new Token(
+              code.substring(this.start, this.current + 1),
+              this.line,
+              this.col,
+              TokenType.KEYWORD
+            )
+          );
         } else {
-          this.tokens.push(new Token(code.substring(this.start, this.current + 1), this.line, this.col, TokenType.IDENTIFIER));
+          this.tokens.push(
+            new Token(
+              code.substring(this.start, this.current + 1),
+              this.line,
+              this.col,
+              TokenType.IDENTIFIER
+            )
+          );
         }
         this.col++;
         this.current++;
@@ -246,7 +295,7 @@ tokenize(code) {
       } else {
         if (this.isNumerical(currentChar)) {
           while (!this.isAtEnd()) {
-            if (this.isNumerical(this.peek()) || this.peek() == '.') {
+            if (this.isNumerical(this.peek()) || this.peek() == ".") {
               this.col++;
               this.current++;
             } else {
@@ -254,91 +303,187 @@ tokenize(code) {
             }
           }
 
-          this.tokens.push(new Token(code.substring(this.start, this.current + 1), this.line, this.col, TokenType.NUMBER));
+          this.tokens.push(
+            new Token(
+              code.substring(this.start, this.current + 1),
+              this.line,
+              this.col,
+              TokenType.NUMBER
+            )
+          );
         } else {
           switch (currentChar) {
-            case ' ':
-              this.tokens.push(new Token(code.substring(this.start, this.current + 1), this.line, this.col, TokenType.SPACE));
+            case " ":
+              this.tokens.push(
+                new Token(
+                  code.substring(this.start, this.current + 1),
+                  this.line,
+                  this.col,
+                  TokenType.SPACE
+                )
+              );
               break;
-            case '\n':
-              this.tokens.push(new Token(code.substring(this.start, this.current + 1), this.line, this.col, TokenType.NEWLINE));
+            case "\n":
+              this.tokens.push(
+                new Token(
+                  code.substring(this.start, this.current + 1),
+                  this.line,
+                  this.col,
+                  TokenType.NEWLINE
+                )
+              );
               this.line++;
               this.col = -1;
               break;
-            case '\t':
-              this.tokens.push(new Token(code.substring(this.start, this.current + 1), this.line, this.col, TokenType.TAB));
+            case "\t":
+              this.tokens.push(
+                new Token(
+                  code.substring(this.start, this.current + 1),
+                  this.line,
+                  this.col,
+                  TokenType.TAB
+                )
+              );
               break;
-            case '@':
+            case "@":
               annotation();
               this.current++;
-              this.tokens.push(new Token(code.substring(this.start, this.current + 1), this.line, this.col, TokenType.ANNOTATION));
+              this.tokens.push(
+                new Token(
+                  code.substring(this.start, this.current + 1),
+                  this.line,
+                  this.col,
+                  TokenType.ANNOTATION
+                )
+              );
               break;
             case '"':
               // Supports multiline strings
               if (this.peek() == '"' && this.peekNext() == '"') {
                 multilineString();
                 this.current++;
-                this.tokens.push(new Token(code.substring(this.start, this.current + 1), this.line, this.col, TokenType.STRING));
+                this.tokens.push(
+                  new Token(
+                    code.substring(this.start, this.current + 1),
+                    this.line,
+                    this.col,
+                    TokenType.STRING
+                  )
+                );
               } else {
                 string();
                 this.current++;
-                this.tokens.push(new Token(code.substring(this.start, this.current + 1), this.line, this.col, TokenType.STRING));
+                this.tokens.push(
+                  new Token(
+                    code.substring(this.start, this.current + 1),
+                    this.line,
+                    this.col,
+                    TokenType.STRING
+                  )
+                );
               }
               break;
-            case '\'':
+            case "'":
               character();
               this.current++;
-              this.tokens.push(new Token(code.substring(this.start, this.current + 1), this.line, this.col, TokenType.STRING));
+              this.tokens.push(
+                new Token(
+                  code.substring(this.start, this.current + 1),
+                  this.line,
+                  this.col,
+                  TokenType.STRING
+                )
+              );
               break;
-            case '/':
-              if (this.peek() == '/') {
+            case "/":
+              if (this.peek() == "/") {
                 this.comment();
                 this.current++;
-                this.tokens.push(new Token(code.substring(this.start, this.current + 1), this.line, this.col, TokenType.STRING));
-              } else if (this.peek() == '*') {
-                if (this.peekNext() != '*') {
+                this.tokens.push(
+                  new Token(
+                    code.substring(this.start, this.current + 1),
+                    this.line,
+                    this.col,
+                    TokenType.STRING
+                  )
+                );
+              } else if (this.peek() == "*") {
+                if (this.peekNext() != "*") {
                   this.multilineComment();
                   this.current++;
-                  this.tokens.push(new Token(code.substring(this.start, this.current + 1), this.line, this.col, TokenType.STRING));
+                  this.tokens.push(
+                    new Token(
+                      code.substring(this.start, this.current + 1),
+                      this.line,
+                      this.col,
+                      TokenType.STRING
+                    )
+                  );
                 } else {
                   this.multilineComment();
                   this.current++;
-                  this.tokens.push(new Token(code.substring(this.start, this.current + 1), this.line, this.col, TokenType.JAVADOC));
+                  this.tokens.push(
+                    new Token(
+                      code.substring(this.start, this.current + 1),
+                      this.line,
+                      this.col,
+                      TokenType.JAVADOC
+                    )
+                  );
                 }
               } else {
-                this.tokens.push(new Token(code.substring(this.start, this.current + 1), this.line, this.col, TokenType.OTHERPUNCTUATION));
+                this.tokens.push(
+                  new Token(
+                    code.substring(this.start, this.current + 1),
+                    this.line,
+                    this.col,
+                    TokenType.OTHERPUNCTUATION
+                  )
+                );
               }
               break;
-            case ';':
-            case '(':
-            case ')':
-            case '{':
-            case '}':
-            case '<':
-            case '>':
-            case '[':
-            case ']':
-            case ',':
-            case '*':
-            case '=':
-            case '+':
-            case '-':
-            case '%':
-            case '!':
-            case '~':
-            case '&':
-            case '|':
-            case '?':
-            case ':':
-            case '^':
-            case '.':
-              this.tokens.push(new Token(code.substring(this.start, this.current + 1), this.line, this.col, TokenType.OTHERPUNCTUATION));
+            case ";":
+            case "(":
+            case ")":
+            case "{":
+            case "}":
+            case "<":
+            case ">":
+            case "[":
+            case "]":
+            case ",":
+            case "*":
+            case "=":
+            case "+":
+            case "-":
+            case "%":
+            case "!":
+            case "~":
+            case "&":
+            case "|":
+            case "?":
+            case ":":
+            case "^":
+            case ".":
+              this.tokens.push(
+                new Token(
+                  code.substring(this.start, this.current + 1),
+                  this.line,
+                  this.col,
+                  TokenType.OTHERPUNCTUATION
+                )
+              );
               break;
             default:
-              console.log("Could not interpret character: '" + currentChar + "'. [ln: " + this.line + "]");
+              console.log(
+                "Could not interpret character: '" +
+                  currentChar +
+                  "'. [ln: " +
+                  this.line +
+                  "]"
+              );
               break;
           }
-
         }
         this.col++;
         this.current++;
@@ -347,11 +492,23 @@ tokenize(code) {
     }
 
     for (var index = 0; index < this.tokens.length; index++) {
-      if (this.tokens[index].text === "import" || this.tokens[index].text === "package") {
+      if (
+        this.tokens[index].text === "import" ||
+        this.tokens[index].text === "package"
+      ) {
         var indexstart = index + 1;
         while (!this.tokens[indexstart].text === ";") {
           var token = this.tokens[indexstart];
-          this.tokens.splice(indexstart, 0, new Token(token.text, token.this.line, token.col, TokenType.IMPORTNAME));
+          this.tokens.splice(
+            indexstart,
+            0,
+            new Token(
+              token.text,
+              token.this.line,
+              token.col,
+              TokenType.IMPORTNAME
+            )
+          );
           this.tokens.remove(indexstart + 1);
           indexstart++;
         }
@@ -359,34 +516,54 @@ tokenize(code) {
         this.current = index;
         if (!this.isAtEnd() && this.tokens[index + 1].text === ".") {
           var indexstart = index + 1;
-          while (this.tokens[indexstart].type != TokenType.OTHERPUNCTUATION || this.tokens[indexstart].text === ".") {
+          while (
+            this.tokens[indexstart].type != TokenType.OTHERPUNCTUATION ||
+            this.tokens[indexstart].text === "."
+          ) {
             if (this.tokens[indexstart].text === ".") {
               indexstart++;
               continue;
             }
             var token = this.tokens[indexstart];
-            this.tokens.splice(indexstart, 0, new Token(token.text, token.this.line, token.col, TokenType.HEADDATATYPE));
+            this.tokens.splice(
+              indexstart,
+              0,
+              new Token(
+                token.text,
+                token.this.line,
+                token.col,
+                TokenType.HEADDATATYPE
+              )
+            );
             this.tokens.remove(indexstart + 1);
             indexstart++;
           }
         }
       }
 
-      if (this.isUppercase(this.tokens[index].text) && (this.tokens[index].type == TokenType.HEADDATATYPE || this.tokens[index].type == TokenType.IDENTIFIER)) {
+      if (
+        this.isUppercase(this.tokens[index].text) &&
+        (this.tokens[index].type == TokenType.HEADDATATYPE ||
+          this.tokens[index].type == TokenType.IDENTIFIER)
+      ) {
         var token = this.tokens[index];
-        this.tokens.push(index, 0, new Token(token.text, token.this.line, token.col, TokenType.CONSTANT));
+        this.tokens.push(
+          index,
+          0,
+          new Token(token.text, token.this.line, token.col, TokenType.CONSTANT)
+        );
         this.tokens.remove(index + 1);
       }
     }
 
     return this.tokens;
-}
+  }
 }
 
 var code = document.getElementsByTagName("code");
 for (var i = 0; i < code.length; i++) {
-var tokensList = new Tokenizer().tokenize(code[i].innerText);
-var parser = new Parser(this.tokensList);
-var output = parser.parse();
-code[i].innerHTML = output;
+  var tokensList = new Tokenizer().tokenize(code[i].innerText);
+  var parser = new Parser(this.tokensList);
+  var output = parser.parse();
+  code[i].innerHTML = output;
 }

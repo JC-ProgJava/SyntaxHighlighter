@@ -81,7 +81,7 @@ class Parser {
 class Token {
   constructor(text, line, col, type) {
     this.text = text;
-    this.line = this.line;
+    this.line = line;
     this.col = col;
     this.type = type;
   }
@@ -169,7 +169,14 @@ class Tokenizer {
 
   isAlphabet(currentChar) {
     return (
-      String(currentChar).match(new RegExp("^[a-zA-Z_$][a-zA-Z_$0-9]*$")) !=
+      String(currentChar).match(new RegExp("[a-zA-Z_$]")) !=
+      null
+    );
+  }
+
+  isIdentifierEnding(currentChar) {
+    return (
+      String(currentChar).match(new RegExp("[a-zA-Z_$0-9]")) !=
       null
     );
   }
@@ -184,6 +191,7 @@ class Tokenizer {
         break;
       } else if (this.peek() == "\n") {
         this.line++;
+        break;
       }
       this.col++;
       this.current++;
@@ -228,6 +236,7 @@ class Tokenizer {
   isUppercase(text) {
     return text.match(new RegExp("^[A-Z_$][A-Z_$0-9]*$")) != null;
   }
+
   comment() {
     while (!this.isAtEnd() && this.peek() != "\n") {
       this.col++;
@@ -264,7 +273,7 @@ class Tokenizer {
     while (!this.isAtEnd()) {
       var currentChar = this.sourceCode.charAt(this.current);
       if (this.isAlphabet(currentChar)) {
-        while (!this.isAtEnd() && this.isAlphabet(this.peek())) {
+        while (!this.isAtEnd() && this.isIdentifierEnding(this.peek())) {
           this.col++;
           this.current++;
         }
@@ -316,7 +325,7 @@ class Tokenizer {
             case " ":
               this.tokens.push(
                 new Token(
-                  code.substring(this.start, this.current + 1),
+                  " ",
                   this.line,
                   this.col,
                   TokenType.SPACE
@@ -326,7 +335,7 @@ class Tokenizer {
             case "\n":
               this.tokens.push(
                 new Token(
-                  code.substring(this.start, this.current + 1),
+                  "\n",
                   this.line,
                   this.col,
                   TokenType.NEWLINE
@@ -338,7 +347,7 @@ class Tokenizer {
             case "\t":
               this.tokens.push(
                 new Token(
-                  code.substring(this.start, this.current + 1),
+                  "    ",
                   this.line,
                   this.col,
                   TokenType.TAB
@@ -504,15 +513,18 @@ class Tokenizer {
             0,
             new Token(
               token.text,
-              token.this.line,
+              token.line,
               token.col,
               TokenType.IMPORTNAME
             )
           );
-          this.tokens.remove(indexstart + 1);
+          this.tokens.splice(indexstart + 1, 1);
           indexstart++;
         }
-      } else if (this.tokens[index].type == TokenType.IDENTIFIER) {
+      } else if (
+        this.tokens[index].type == TokenType.IDENTIFIER ||
+        (this.tokens[index].text.match(/[})\]]/g) != null)
+      ) {
         this.current = index;
         if (!this.isAtEnd() && this.tokens[index + 1].text === ".") {
           var indexstart = index + 1;
@@ -530,12 +542,12 @@ class Tokenizer {
               0,
               new Token(
                 token.text,
-                token.this.line,
+                token.line,
                 token.col,
                 TokenType.HEADDATATYPE
               )
             );
-            this.tokens.remove(indexstart + 1);
+            this.tokens.splice(indexstart + 1, 1);
             indexstart++;
           }
         }
@@ -547,12 +559,12 @@ class Tokenizer {
           this.tokens[index].type == TokenType.IDENTIFIER)
       ) {
         var token = this.tokens[index];
-        this.tokens.push(
+        this.tokens.splice(
           index,
           0,
-          new Token(token.text, token.this.line, token.col, TokenType.CONSTANT)
+          new Token(token.text, token.line, token.col, TokenType.CONSTANT)
         );
-        this.tokens.remove(index + 1);
+        this.tokens.splice(index + 1, 1);
       }
     }
 

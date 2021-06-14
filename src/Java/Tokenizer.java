@@ -82,7 +82,11 @@ public class Tokenizer {
   }
 
   private static boolean isAlphabet(char currentChar) {
-    return String.valueOf(currentChar).matches("^[a-zA-Z_$][a-zA-Z_$0-9]*$");
+    return String.valueOf(currentChar).matches("[a-zA-Z_$]");
+  }
+
+  private static boolean isIdentifierEnding(char currentChar) {
+    return String.valueOf(currentChar).matches("[a-zA-Z_$0-9]");
   }
 
   private static boolean isAtEnd() {
@@ -94,7 +98,7 @@ public class Tokenizer {
     while (!isAtEnd()) {
       char currentChar = sourceCode.charAt(current);
       if (isAlphabet(currentChar)) {
-        while (!isAtEnd() && isAlphabet(peek())) {
+        while (!isAtEnd() && isIdentifierEnding(peek())) {
           col++;
           current++;
         }
@@ -218,7 +222,7 @@ public class Tokenizer {
           tokens.remove(indexStart + 1);
           indexStart++;
         }
-      } else if (tokens.get(index).type == TokenType.IDENTIFIER) {
+      } else if (tokens.get(index).type == TokenType.IDENTIFIER || tokens.get(index).text.matches("[])}]")) {
         current = index;
         if (!isAtEnd() && tokens.get(index + 1).text.equals(".")) {
           int indexStart = index + 1;
@@ -251,6 +255,7 @@ public class Tokenizer {
         break;
       } else if (peek() == '\n') {
         line++;
+        break;
       }
       col++;
       current++;

@@ -506,7 +506,7 @@ class Tokenizer {
         this.tokens[index].text === "package"
       ) {
         var indexstart = index + 1;
-        while (!this.tokens[indexstart].text === ";") {
+        while (this.tokens[indexstart].text !== ";") {
           var token = this.tokens[indexstart];
           this.tokens.splice(
             indexstart,

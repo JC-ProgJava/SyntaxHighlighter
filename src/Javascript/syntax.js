@@ -526,7 +526,7 @@ class Tokenizer {
         (this.tokens[index].text.match(/[})\]]/g) != null)
       ) {
         this.current = index;
-        if (!this.isAtEnd() && this.tokens[index + 1].text === ".") {
+        if (!this.isAtEnd() && this.tokens.length > index + 1 && this.tokens[index + 1].text === ".") {
           var indexstart = index + 1;
           while (
             this.tokens[indexstart].type != TokenType.OTHERPUNCTUATION ||

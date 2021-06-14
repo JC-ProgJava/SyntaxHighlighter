@@ -224,7 +224,7 @@ public class Tokenizer {
         }
       } else if (tokens.get(index).type == TokenType.IDENTIFIER || tokens.get(index).text.matches("[])}]")) {
         current = index;
-        if (!isAtEnd() && tokens.get(index + 1).text.equals(".")) {
+        if (!isAtEnd() && tokens.size() > index + 1 && tokens.get(index + 1).text.equals(".")) {
           int indexStart = index + 1;
           while (tokens.get(indexStart).type != TokenType.OTHERPUNCTUATION || tokens.get(indexStart).text.equals(".")) {
             if (tokens.get(indexStart).text.equals(".")) {

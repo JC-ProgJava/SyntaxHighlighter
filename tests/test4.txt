@@ -2,4 +2,6 @@
     Multiline string
 """
 
+"Normal string"
+
 function()

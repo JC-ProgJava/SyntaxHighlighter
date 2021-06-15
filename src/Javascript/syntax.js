@@ -218,6 +218,8 @@ class Tokenizer {
       this.col++;
       this.current++;
     }
+    this.col++;
+    this.current++;
   }
 
   multilineComment() {
@@ -252,7 +254,9 @@ class Tokenizer {
   character() {
     while (
       !this.isAtEnd() &&
-      (this.peek() != "'" || this.sourceCode.charAt(this.current) == "\\")
+      (this.peek() != "'" ||
+       (this.sourceCode.charAt(this.current) == '\\') &&
+       this.sourceCode.charAt(this.current - 1) != '\\')
     ) {
       this.col++;
       this.current++;
@@ -373,7 +377,8 @@ class Tokenizer {
               break;
             case '"':
               // Supports multiline strings
-              if (this.peek() == '"' && this.peekNext() == '"') {
+              if (this.peek() == '\"' && this.peekNext() == '\"') {
+                this.current += 2;
                 this.multilineString();
               } else {
                 this.string();

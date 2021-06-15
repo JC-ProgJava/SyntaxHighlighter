@@ -255,8 +255,8 @@ class Tokenizer {
     while (
       !this.isAtEnd() &&
       (this.peek() != "'" ||
-       (this.sourceCode.charAt(this.current) == '\\') &&
-       this.sourceCode.charAt(this.current - 1) != '\\')
+       (this.sourceCode.charAt(this.current) == '\\' && 
+        this.sourceCode.charAt(this.current - 1) != '\\'))
     ) {
       this.col++;
       this.current++;
@@ -266,7 +266,9 @@ class Tokenizer {
   string() {
     while (
       !this.isAtEnd() &&
-      (this.peek() != '"' || this.sourceCode.charAt(this.current) == "\\")
+      (this.peek() != '"' ||
+       (this.sourceCode.charAt(this.current) == "\\" && 
+        this.sourceCode.charAt(this.current - 1) != '\\'))
     ) {
       this.col++;
       this.current++;

@@ -307,14 +307,14 @@ public class Tokenizer {
   }
 
   private void character() {
-    while (!isAtEnd() && (peek() != '\'' || (sourceCode.charAt(current) == '\\') && sourceCode.charAt(current - 1) != '\\')) {
+    while (!isAtEnd() && (peek() != '\'' || (sourceCode.charAt(current) == '\\' && sourceCode.charAt(current - 1) != '\\'))) {
       col++;
       current++;
     }
   }
 
   private void string() {
-    while (!isAtEnd() && (peek() != '"' || (sourceCode.charAt(current) == '\\') && sourceCode.charAt(current - 1) != '\\')) {
+    while (!isAtEnd() && (peek() != '"' || (sourceCode.charAt(current) == '\\' && sourceCode.charAt(current - 1) != '\\'))) {
       col++;
       current++;
     }

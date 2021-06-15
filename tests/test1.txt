@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Tokenizer {
-  private static int line = 0;
+  private static int line = 1;
   private static int col = 0;
   private static int start = 0;
   private static int current = 0;
@@ -82,7 +82,11 @@ public class Tokenizer {
   }
 
   private static boolean isAlphabet(char currentChar) {
-    return String.valueOf(currentChar).matches("^[a-zA-Z_$][a-zA-Z_$0-9]*$");
+    return String.valueOf(currentChar).matches("[a-zA-Z_$]");
+  }
+
+  private static boolean isIdentifierEnding(char currentChar) {
+    return String.valueOf(currentChar).matches("[a-zA-Z_$0-9]");
   }
 
   private static boolean isAtEnd() {
@@ -94,7 +98,7 @@ public class Tokenizer {
     while (!isAtEnd()) {
       char currentChar = sourceCode.charAt(current);
       if (isAlphabet(currentChar)) {
-        while (!isAtEnd() && isAlphabet(peek())) {
+        while (!isAtEnd() && isIdentifierEnding(peek())) {
           col++;
           current++;
         }
@@ -106,90 +110,102 @@ public class Tokenizer {
         col++;
         current++;
         start = current;
-      } else if (isNumerical(currentChar)) {
-        while (!isAtEnd()) {
-          if (isNumerical(peek()) || peek() == '.') {
-            col++;
-            current++;
-          } else {
-            break;
-          }
-        }
-
-        tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.NUMBER));
-        col++;
-        current++;
-        start = current;
       } else {
-        switch (currentChar) {
-          case ' ':
-            tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.SPACE));
-            break;
-          case '\n':
-            tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.NEWLINE));
-            line++;
-            col = -1;
-            break;
-          case '\t':
-            tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.TAB));
-            break;
-          case '"':
-            if (peek() == '"' && peekNext() == '"') {
-
-            } else {
-              string();
+        if (isNumerical(currentChar)) {
+          while (!isAtEnd()) {
+            if (isNumerical(peek()) || peek() == '.') {
+              col++;
               current++;
-              tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.STRING));
+            } else {
+              break;
             }
-            break;
-          case '\'':
-            character();
-            current++;
-            tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.STRING));
-            break;
-          case '/':
-            if (peek() == '/') {
-              comment();
+          }
+
+          tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.NUMBER));
+        } else {
+          switch (currentChar) {
+            case ' ':
+              tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.SPACE));
+              break;
+            case '\n':
+              tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.NEWLINE));
+              line++;
+              col = -1;
+              break;
+            case '\t':
+              tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.TAB));
+              break;
+            case '@':
+              annotation();
+              current++;
+              tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.ANNOTATION));
+              break;
+            case '"':
+              // Supports multiline strings
+              if (peek() == '\"' && peekNext() == '\"') {
+                current += 2;
+                multilineString();
+              } else {
+                string();
+              }
               current++;
               tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.STRING));
-            } else if (peek() == '*') {
-              multilineComment();
+              break;
+            case '\'':
+              character();
               current++;
               tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.STRING));
-            } else {
+              break;
+            case '/':
+              if (peek() == '/') {
+                comment();
+                current++;
+                tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.STRING));
+              } else if (peek() == '*') {
+                if (peekNext() != '*') {
+                  multilineComment();
+                  current++;
+                  tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.STRING));
+                } else {
+                  multilineComment();
+                  current++;
+                  tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.JAVADOC));
+                }
+              } else {
+                tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.OTHERPUNCTUATION));
+              }
+              break;
+            case ';':
+            case '(':
+            case ')':
+            case '{':
+            case '}':
+            case '<':
+            case '>':
+            case '[':
+            case ']':
+            case ',':
+            case '*':
+            case '=':
+            case '+':
+            case '-':
+            case '%':
+            case '!':
+            case '~':
+            case '&':
+            case '|':
+            case '?':
+            case ':':
+            case '^':
+            case '.':
               tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.OTHERPUNCTUATION));
-            }
-            break;
-          case ';':
-          case '(':
-          case ')':
-          case '{':
-          case '}':
-          case '<':
-          case '>':
-          case '[':
-          case ']':
-          case ',':
-          case '*':
-          case '=':
-          case '+':
-          case '-':
-          case '%':
-          case '!':
-          case '~':
-          case '&':
-          case '|':
-          case '?':
-          case ':':
-          case '^':
-          case '.':
-            tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.OTHERPUNCTUATION));
-            break;
-          default:
-            System.err.println("Could not interpret character: '" + currentChar + "'.");
-            break;
-        }
+              break;
+            default:
+              System.err.println("Could not interpret character: '" + currentChar + "'. [ln: " + line + "]");
+              break;
+          }
 
+        }
         col++;
         current++;
         start = current;
@@ -205,13 +221,9 @@ public class Tokenizer {
           tokens.remove(indexStart + 1);
           indexStart++;
         }
-      } else if (isUppercase(tokens.get(index).text)) {
-        Token token = tokens.get(index);
-        tokens.add(index, new Token(token.text, token.line, token.col, TokenType.CONSTANT));
-        tokens.remove(index + 1);
-      } else if (tokens.get(index).type == TokenType.IDENTIFIER) {
+      } else if (tokens.get(index).type == TokenType.IDENTIFIER || tokens.get(index).text.matches("[])}]")) {
         current = index;
-        if (!isAtEnd() && tokens.get(index + 1).text.equals(".")) {
+        if (!isAtEnd() && tokens.size() > index + 1 && tokens.get(index + 1).text.equals(".")) {
           int indexStart = index + 1;
           while (tokens.get(indexStart).type != TokenType.OTHERPUNCTUATION || tokens.get(indexStart).text.equals(".")) {
             if (tokens.get(indexStart).text.equals(".")) {
@@ -225,14 +237,23 @@ public class Tokenizer {
           }
         }
       }
+
+      if (isUppercase(tokens.get(index).text) && (tokens.get(index).type == TokenType.HEADDATATYPE || tokens.get(index).type == TokenType.IDENTIFIER)) {
+        Token token = tokens.get(index);
+        tokens.add(index, new Token(token.text, token.line, token.col, TokenType.CONSTANT));
+        tokens.remove(index + 1);
+      }
     }
 
     return tokens;
   }
 
-  private void multilineComment() {
+  private void annotation() {
     while (!isAtEnd()) {
-      if (peek() == '*' && peekNext() == '/') {
+      if (peek() == ' ') {
+        break;
+      } else if (peek() == '\n') {
+        line++;
         break;
       }
       col++;
@@ -240,12 +261,42 @@ public class Tokenizer {
     }
   }
 
+  private void multilineString() {
+    while (!isAtEnd()) {
+      if (sourceCode.charAt(current) == '"' && peek() == '"' && peekNext() == '"') {
+        if ((current - 1 >= 0 && sourceCode.charAt(current - 1) != '\\') || current == 0) {
+          break;
+        }
+      } else if (peek() == '\n') {
+        line++;
+      }
+      col++;
+      current++;
+    }
+    col++;
+    current++;
+  }
+
+  private void multilineComment() {
+    while (!isAtEnd()) {
+      if (peek() == '*' && peekNext() == '/') {
+        break;
+      } else if (peek() == '\n') {
+        line++;
+      }
+      col++;
+      current++;
+    }
+    col++;
+    current++;
+  }
+
   private char peekNext() {
     return sourceCode.charAt(current + 2);
   }
 
   private boolean isUppercase(String text) {
-    return text.matches("[A-Z_]");
+    return text.matches("^[A-Z_$][A-Z_$0-9]*$");
   }
 
   private void comment() {
@@ -256,14 +307,14 @@ public class Tokenizer {
   }
 
   private void character() {
-    while (!isAtEnd() && peek() != '\'') {
+    while (!isAtEnd() && (peek() != '\'' || (sourceCode.charAt(current) == '\\') && sourceCode.charAt(current - 1) != '\\')) {
       col++;
       current++;
     }
   }
 
   private void string() {
-    while (!isAtEnd() && peek() != '"') {
+    while (!isAtEnd() && (peek() != '"' || (sourceCode.charAt(current) == '\\') && sourceCode.charAt(current - 1) != '\\')) {
       col++;
       current++;
     }

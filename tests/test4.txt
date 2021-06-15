@@ -1,7 +1,8 @@
 """
+    \\\"
     Multiline string
 """
 
-"Normal string"
+"\\\""Normal string"
 
 function()

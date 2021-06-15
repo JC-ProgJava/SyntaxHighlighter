@@ -144,13 +144,11 @@ public class Tokenizer {
               // Supports multiline strings
               if (peek() == '"' && peekNext() == '"') {
                 multilineString();
-                current++;
-                tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.STRING));
               } else {
                 string();
-                current++;
-                tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.STRING));
               }
+              current++;
+              tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.STRING));
               break;
             case '\'':
               character();
@@ -264,8 +262,10 @@ public class Tokenizer {
 
   private void multilineString() {
     while (!isAtEnd()) {
-      if (sourceCode.charAt(current - 1) != '\\' && sourceCode.charAt(current) == '"' && peek() == '"' && peekNext() == '"') {
-        break;
+      if (sourceCode.charAt(current) == '"' && peek() == '"' && peekNext() == '"') {
+        if ((current - 1 >= 0 && sourceCode.charAt(current - 1) != '\\') || current == 0) {
+          break;
+        }
       } else if (peek() == '\n') {
         line++;
       }

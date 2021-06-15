@@ -142,7 +142,8 @@ public class Tokenizer {
               break;
             case '"':
               // Supports multiline strings
-              if (peek() == '"' && peekNext() == '"') {
+              if (peek() == '\"' && peekNext() == '\"') {
+                current += 2;
                 multilineString();
               } else {
                 string();
@@ -272,6 +273,8 @@ public class Tokenizer {
       col++;
       current++;
     }
+    col++;
+    current++;
   }
 
   private void multilineComment() {

@@ -8,9 +8,9 @@ jobs:
     
     steps:
     - name: Copy files
-      run: cp ./src/Javascript/syntax.js ./out
+      run: cp src/Javascript/syntax.js out
     - name: Copy files
-      run: cp ./src/CSS/syntax.css ./out
+      run: cp src/CSS/syntax.css out
     - name: Checkout
       uses: actions/checkout@v2
     - name: minisauras
@@ -19,4 +19,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.MINIFIER }}
       id: dir
       with:
-        directory: './out/'
+        directory: 'out/'

@@ -1,5 +1,5 @@
 public enum TokenType {
-  IDENTIFIER, // variables
+  IDENTIFIER, // variables, other names that usually appear black in editors.
   KEYWORD, // 'class', etc. also includes data types (i.e., double)
   NUMBER, STRING,
   SPACE, NEWLINE, TAB,

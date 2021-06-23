@@ -11,21 +11,22 @@ jobs:
       id: package
       uses: juliangruber/read-file-action@v1
       with:
-        path: src/Javascript/syntax.js
+        path: ./src/Javascript/syntax.js
+        
     - uses: "finnp/create-file-action@master"
       env:
-        FILE_NAME: "out/syntax.min.js"
-        FILE_DATA: "${{ steps.package.outputs.content }}"
+          FILE_NAME: "out/syntax.min.js"
+          FILE_DATA: "${{ steps.package.outputs.content }}"
 
     - name: Read source files 2
       id: package2
       uses: juliangruber/read-file-action@v1
       with:
-        path: src/CSS/syntax.css
+        path: ./src/CSS/syntax.css
     - uses: "finnp/create-file-action@master"
-      env:
-        FILE_NAME: "out/syntax.min.css"
-        FILE_DATA: "${{ steps.package2.outputs.content }}"
+        env:
+          FILE_NAME: "out/syntax.min.css"
+          FILE_DATA: "${{ steps.package2.outputs.content }}"
       
     - name: Checkout
       uses: actions/checkout@v2

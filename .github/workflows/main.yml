@@ -24,9 +24,9 @@ jobs:
       with:
         path: ./src/CSS/syntax.css
     - uses: "finnp/create-file-action@master"
-        env:
-          FILE_NAME: "out/syntax.min.css"
-          FILE_DATA: "${{ steps.package2.outputs.content }}"
+      env:
+        FILE_NAME: "out/syntax.min.css"
+        FILE_DATA: "${{ steps.package2.outputs.content }}"
       
     - name: Checkout
       uses: actions/checkout@v2

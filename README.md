@@ -17,6 +17,7 @@ There are some example output files (.html) in the examples folder that you can 
 You can take a look at example output files [here](https://github.com/JC-ProgJava/SyntaxHighlighter/tree/main/examples). See live previews in the links below:
 - [SmartEditor.html](https://htmlpreview.github.io/?https://raw.githubusercontent.com/JC-ProgJava/SyntaxHighlighter/main/examples/smarteditor.html) ([source repository](https://github.com/JC-ProgJava/SmartEditor.java))
 - [index.html](https://htmlpreview.github.io/?https://raw.githubusercontent.com/JC-ProgJava/SyntaxHighlighter/main/examples/index.html)
+- Try highlighting your own source code [here](https://jc-progjava.github.io/SyntaxHighlighter/)!
 
 ### Features
 - Support for Java 16 (multiline strings, records, new keywords [permits, record, sealed, non-sealed])

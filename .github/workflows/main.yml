@@ -7,29 +7,10 @@ jobs:
     runs-on: ubuntu-18.04
     
     steps:
-    - name: list directory
-      run: ls -la .
-    - name: Read source files 1
-      id: package
-      uses: juliangruber/read-file-action@v1
-      with:
-        path: ./src/Javascript/syntax.js
-        
-    - uses: "finnp/create-file-action@master"
-      env:
-          FILE_NAME: "./out/syntax.min.js"
-          FILE_DATA: "${{ steps.package.outputs.content }}"
-
-    - name: Read source files 2
-      id: package2
-      uses: juliangruber/read-file-action@v1
-      with:
-        path: ./src/CSS/syntax.css
-    - uses: "finnp/create-file-action@master"
-      env:
-        FILE_NAME: "./out/syntax.min.css"
-        FILE_DATA: "${{ steps.package2.outputs.content }}"
-      
+    - name: Copy files
+      run: cp ./src/Javascript/syntax.js ./out
+    - name: Copy files
+      run: cp ./src/CSS/syntax.css ./out
     - name: Checkout
       uses: actions/checkout@v2
     - name: minisauras

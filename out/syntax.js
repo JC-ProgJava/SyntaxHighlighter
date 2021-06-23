@@ -1,3 +1,4 @@
+// Token types (see the Java version for more info.)
 const TokenType = Object.freeze({
   IDENTIFIER: "IDENTIFIER",
   KEYWORD: "KEYWORD",

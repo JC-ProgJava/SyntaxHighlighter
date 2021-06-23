@@ -3,7 +3,8 @@ name: Minify source files
 on: 
   push:
     paths:
-    - 'src/**'
+    - 'src/CSS/**'
+    - 'src/Javascript/**'
 
 jobs:
   read:

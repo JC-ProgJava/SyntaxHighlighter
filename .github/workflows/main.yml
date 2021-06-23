@@ -15,4 +15,4 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.MINIFIER }}
       id: dir
       with:
-        directory: './' ## minify all files from root directory
+        directory: 'src/' ## minify all files from root directory

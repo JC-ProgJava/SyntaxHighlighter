@@ -7,6 +7,8 @@ jobs:
     runs-on: ubuntu-18.04
     
     steps:
+    - name: list directory
+      run: ls
     - name: Read source files 1
       id: package
       uses: juliangruber/read-file-action@v1

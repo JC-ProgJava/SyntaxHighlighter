@@ -1,6 +1,9 @@
 name: Minify source files
 
-on: [push]
+on: 
+  push:
+    paths:
+    - 'src/**'
 
 jobs:
   read:

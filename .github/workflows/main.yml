@@ -11,7 +11,7 @@ jobs:
       id: package
       uses: juliangruber/read-file-action@v1
       with:
-        path: ./src/Javascript/syntax.js
+        path: src/Javascript/syntax.js
         
     - uses: "finnp/create-file-action@master"
       env:
@@ -22,7 +22,7 @@ jobs:
       id: package2
       uses: juliangruber/read-file-action@v1
       with:
-        path: ./src/CSS/syntax.css
+        path: src/CSS/syntax.css
     - uses: "finnp/create-file-action@master"
       env:
         FILE_NAME: "out/syntax.min.css"

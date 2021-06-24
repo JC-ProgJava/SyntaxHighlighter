@@ -1,6 +1,6 @@
 name: Minify source files
 
-on: 
+on:
   push:
     paths:
     - 'src/CSS/**'
@@ -14,7 +14,7 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
       with:
-        persist-credentials: false 
+        persist-credentials: false
         fetch-depth: 0
     - name: Copy files
       run: cp src/Javascript/syntax.js out

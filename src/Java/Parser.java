@@ -89,6 +89,7 @@ public class Parser {
           outCodeHTML += "<span class=\"" + token.type.toString().toLowerCase() + "\"> </span>";
           outPlain += " ";
         }
+        default -> System.err.println("Unexpected enum: " + token.type.toString());
       }
     }
     outCodeHTML += "</code>";

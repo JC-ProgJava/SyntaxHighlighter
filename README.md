@@ -1,4 +1,7 @@
 # SyntaxHighlighter
+
+[![CodeFactor](https://www.codefactor.io/repository/github/jc-progjava/syntaxhighlighter/badge)](https://www.codefactor.io/repository/github/jc-progjava/syntaxhighlighter)
+
 A syntax highlighting tool made with Java, HTML, CSS & JS.
 
 ### Supported Languages

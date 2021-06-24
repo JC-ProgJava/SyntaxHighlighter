@@ -64,6 +64,9 @@ class Parser {
             '"> </span>';
           this.outPlain += " ";
           break;
+        default:
+          console.log("Unknown token: " + String(this.tokens[index].type));
+          break;
       }
     }
     return this.outCodeHTML;
@@ -380,7 +383,7 @@ class Tokenizer {
               break;
             case '"':
               // Supports multiline strings
-              if (this.peek() == '\"' && this.peekNext() == '\"') {
+              if (this.peek() == '"' && this.peekNext() == '"') {
                 this.current += 2;
                 this.multilineString();
               } else {

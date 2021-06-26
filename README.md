@@ -28,6 +28,6 @@ You can take a look at example output files [here](https://github.com/JC-ProgJav
 - Simple and small: the entire JS script file is less than 600 lines long (~15KB). After minification and zipping, the JS file only takes up **2KB** of space.
 
 ### Why use this syntax highlighter?
-- It is easy to use: just download the JS script and CSS files and link them using `<link>` and `<script>` to webpages and get fully syntax-highlighted code in `<code>` tags. For the Java version, just input the filepath and you get a HTML code file with the syntax-highlighted version of your source file.
+- It is easy to use: just download the JS script and link using `<script>` to webpages and get fully syntax-highlighted code in `<code>` tags. For the Java version, just input the filepath and you get a HTML code file with the syntax-highlighted version of your source file.
 - It is simple and small: as listed in the Features section, the entire JS file is only **2KB** after minification and compression. The expanded (and beautified (done using this [tool](https://prettier.io/))) version is also easy to read and understand for developers who are curious how syntax highlighters are made.
 - It doesn't require any external dependencies.

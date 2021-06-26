@@ -1,0 +1,230 @@
+// This is another random source code file for testing
+// the syntax highlighting tool.
+// The program creates a UI to play the game Tic-Tac-Toe
+
+import javax.swing.*;
+import java.awt.*;
+
+public class tictactoe {
+  private static String text = "X";
+  private static double[][] actPosition = new double[3][3];
+  private static Button[][] allInstance = new Button[3][3];
+  private static double gamePositionCount = 0;
+
+  public static void main(String[] args) {
+    JFrame frame = new JFrame("Tic Tac Toe");
+    frame.setSize(800, 800);
+    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    JPanel panel = new JPanel(new GridLayout(3, 3));
+    for (int index = 0; index < allInstance.length; index++) {
+      for (int indice = 0; indice < allInstance[index].length; indice++) {
+        allInstance[index][indice] = new Button(new JButton(""), index + 1, indice + 1);
+        int finalIndex = index;
+        allInstance[index][indice].button.setFont(new Font("Arial", Font.PLAIN, 80));
+        int finalIndice = indice;
+        allInstance[index][indice].button.addActionListener(e -> {
+          int result = checkGameResult(actPosition);
+          if (result == 1) {
+            end("X Wins");
+          } else if (result == -1) {
+            end("O Wins");
+          } else if (result == 0) {
+            end("Draw");
+          }
+
+          // O: -1
+          // X: 1
+          allInstance[finalIndex][finalIndice].button.setText(text);
+          actPosition[finalIndex][finalIndice] = text.equals("O") ? -1 : 1;
+          text = text.equals("O") ? "X" : "O";
+          allInstance[finalIndex][finalIndice].text = text;
+          allInstance[finalIndex][finalIndice].button.setEnabled(false);
+
+          result = checkGameResult(actPosition);
+          if (result == 1) {
+            end("X Wins");
+          } else if (result == -1) {
+            end("O Wins");
+          } else if (result == 0) {
+            end("Draw");
+          }
+
+          if (result == 2 && text.equals("X")) {
+            bestMove();
+          }
+        });
+        actPosition[index][indice] = 0;
+
+        panel.add(allInstance[index][indice].button);
+      }
+    }
+    bestMove();
+    frame.add(panel);
+    frame.setVisible(true);
+  }
+
+  private static void bestMove() {
+    double bestScore = Double.NEGATIVE_INFINITY;
+    Button bestMove = null;
+    for (int index = 0; index < allInstance.length; index++) {
+      for (int indice = 0; indice < allInstance[index].length; indice++) {
+        if (allInstance[index][indice].button.isEnabled()) {
+          actPosition[index][indice] = 1;
+          double score = minimax(actPosition, 0, false, Double.NEGATIVE_INFINITY, Double.POSITIVE_INFINITY);
+          actPosition[index][indice] = 0;
+          if (score > bestScore) {
+            bestScore = score;
+            bestMove = allInstance[index][indice];
+          }
+        }
+      }
+    }
+    allInstance[bestMove.row - 1][bestMove.col - 1].button.setEnabled(false);
+    allInstance[bestMove.row - 1][bestMove.col - 1].button.setText(text);
+    actPosition[bestMove.row - 1][bestMove.col - 1] = 1;
+    text = text.equals("O") ? "X" : "O";
+
+    System.out.println("Evaluated " + String.format("%.0f", gamePositionCount) + " total game ending positions.");
+    gamePositionCount = 0;
+
+    int result = checkGameResult(actPosition);
+    if (result == 1) {
+      end("X Wins");
+    } else if (result == -1) {
+      end("O Wins");
+    } else if (result == 0) {
+      end("Draw");
+    }
+  }
+
+  private static double minimax(double[][] board, int depth, boolean isMaximisingPlayer, double alpha, double beta) {
+    int result = checkGameResult(board);
+    if (result != 2) {
+      gamePositionCount++;
+      return result;
+    }
+
+    if (isMaximisingPlayer) {
+      double bestScore = Double.NEGATIVE_INFINITY;
+      for (int index = 0; index < board.length; index++) {
+        for (int indice = 0; indice < board[index].length; indice++) {
+          if (board[index][indice] == 0) {
+            board[index][indice] = 1;
+            bestScore = Math.max(bestScore, minimax(board, depth + 1, false, alpha, beta));
+            alpha = Math.max(alpha, bestScore);
+            board[index][indice] = 0;
+            if (alpha >= beta) {
+              break;
+            }
+          }
+        }
+      }
+      return bestScore;
+    } else {
+      double bestScore = Double.POSITIVE_INFINITY;
+      for (int index = 0; index < board.length; index++) {
+        for (int indice = 0; indice < board[index].length; indice++) {
+          if (board[index][indice] == 0) {
+            board[index][indice] = -1;
+            bestScore = Math.min(bestScore, minimax(board, depth + 1, true, alpha, beta));
+            beta = Math.min(beta, bestScore);
+            board[index][indice] = 0;
+            if (beta <= alpha) {
+              break;
+            }
+          }
+        }
+      }
+      return bestScore;
+    }
+  }
+
+  private static void end(String result) {
+    System.out.println(result);
+    for (Button[] x : allInstance) {
+      for (Button y : x) {
+        y.button.setEnabled(false);
+      }
+    }
+  }
+
+  private static int checkGameResult(double[][] actPosition) {
+    boolean isDraw = true;
+    for (int index = 0; index < actPosition.length; index++) {
+      if (actPosition[index][0] == -1
+              && actPosition[index][1] == -1
+              && actPosition[index][2] == -1) {
+        return -1;
+      }
+
+      if (actPosition[0][0] == -1
+              && actPosition[1][1] == -1
+              && actPosition[2][2] == -1) {
+        return -1;
+      }
+
+      if (actPosition[0][2] == -1
+              && actPosition[1][1] == -1
+              && actPosition[2][0] == -1) {
+        return -1;
+      }
+
+      if (actPosition[0][index] == -1
+              && actPosition[1][index] == -1
+              && actPosition[2][index] == -1) {
+        return -1;
+      }
+
+      if (actPosition[index][0] == 1
+              && actPosition[index][1] == 1
+              && actPosition[index][2] == 1) {
+        return 1;
+      }
+
+      if (actPosition[0][0] == 1
+              && actPosition[1][1] == 1
+              && actPosition[2][2] == 1) {
+        return 1;
+      }
+
+      if (actPosition[0][2] == 1
+              && actPosition[1][1] == 1
+              && actPosition[2][0] == 1) {
+        return 1;
+      }
+
+      if (actPosition[0][index] == 1
+              && actPosition[1][index] == 1
+              && actPosition[2][index] == 1) {
+        return 1;
+      }
+
+      for (int indice = 0; indice < actPosition[index].length; indice++) {
+        if (actPosition[index][indice] == 0) {
+          isDraw = false;
+          break;
+        }
+      }
+    }
+
+    if (isDraw) {
+      return 0;
+    }
+
+    // Game ongoing
+    return 2;
+  }
+}
+
+class Button {
+  JButton button;
+  int row;
+  int col;
+  String text;
+
+  public Button(JButton button, int row, int col) {
+    this.button = button;
+    this.row = row;
+    this.col = col;
+  }
+}

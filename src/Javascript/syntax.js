@@ -74,11 +74,11 @@ class Parser {
 
   cleanse(text) {
     return text
-      .replaceAll("[&]", "&amp;")
-      .replaceAll("[ ]", "&nbsp;")
-      .replaceAll("[{]", "&lbrace;")
-      .replaceAll("[<]", "&lt;")
-      .replaceAll("[>]", "&gt;");
+      .replaceAll("&", "&amp;")
+      .replaceAll(" ", "&nbsp;")
+      .replaceAll("{", "&lbrace;")
+      .replaceAll("<", "&lt;")
+      .replaceAll(">", "&gt;");
   }
 }
 

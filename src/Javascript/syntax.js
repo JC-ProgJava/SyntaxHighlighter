@@ -653,11 +653,14 @@ if (style.styleSheet){
   style.appendChild(document.createTextNode(css));
 }
 
+highlight();
 
-var code = document.getElementsByTagName("code");
-for (var i = 0; i < code.length; i++) {
-  var tokensList = new Tokenizer().tokenize(code[i].innerText);
-  var parser = new Parser(tokensList);
-  var output = parser.parse();
-  code[i].innerHTML = output;
+function highlight() {
+  var code = document.getElementsByTagName("code");
+  for (var i = 0; i < code.length; i++) {
+    var tokensList = new Tokenizer().tokenize(code[i].innerText);
+    var parser = new Parser(tokensList);
+    var output = parser.parse();
+    code[i].innerHTML = output;
+  }
 }

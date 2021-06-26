@@ -579,6 +579,7 @@ class Tokenizer {
   }
 }
 
+// Highlighting configuration below ------
 var css = `
     code span {
       display: inline;
@@ -638,6 +639,8 @@ var css = `
       color: #808000;
     }
 `;
+// ----------
+
 var head = document.head || document.getElementsByTagName('head')[0];
 var style = document.createElement('style');
 
@@ -649,6 +652,7 @@ if (style.styleSheet){
 } else {
   style.appendChild(document.createTextNode(css));
 }
+
 
 var code = document.getElementsByTagName("code");
 for (var i = 0; i < code.length; i++) {

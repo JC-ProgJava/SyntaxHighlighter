@@ -47,7 +47,7 @@ public class Test {
 </body>
 <script>
   document.getElementById("input").oninput = function() {
-    document.getElementById("output").innerText = this.innerText;
+    document.getElementById("output").innerText = document.getElementById("input").innerText;
     highlight();
   }
 </script>

@@ -16,6 +16,8 @@ jobs:
         fetch-depth: 0
     - name: Copy files
       run: cp src/Javascript/syntax.js out
+    - name: Copy files
+      run: cp src/Javascript/syntax.js docs
     - name: Commit files
       run: |
         git config --local user.email "41898282+github-actions[bot]@users.noreply.github.com"

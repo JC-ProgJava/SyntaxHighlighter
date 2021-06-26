@@ -20,7 +20,7 @@ a {
 <body>
 <a target="_blank" href="https://github.com/JC-ProgJava/SyntaxHighlighter">Uses this tool</a>
 <br><br>
-<code onblur="this.focus();" id="input" contenteditable>import java.util.Scanner;
+<textarea onblur="this.focus();" id="input" contenteditable>import java.util.Scanner;
 
 /**
 * @Javadoc comments!
@@ -40,33 +40,13 @@ public class Test {
                                 string!
                             """;
   }
-}</code>
+}</textarea>
+  <code id="output"></code>
 </body>
 <script>
   document.getElementById("input").oninput = function() {
-    var pos = document.getElementById("input").selectionStart;
+    document.getElementById("output").innerText = this.innerText;
     highlight();
-    setCaretPosition("input", pos);
-  }
-  
-  function setCaretPosition(elemId, caretPos) {
-    var elem = document.getElementById(elemId);
-
-    if(elem != null) {
-        if(elem.createTextRange) {
-            var range = elem.createTextRange();
-            range.move('character', caretPos);
-            range.select();
-        }
-        else {
-            if(elem.selectionStart) {
-                elem.focus();
-                elem.setSelectionRange(caretPos, caretPos);
-            }
-            else
-                elem.focus();
-        }
-    }
   }
 </script>
 </html>

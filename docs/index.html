@@ -44,7 +44,29 @@ public class Test {
 </body>
 <script>
   document.getElementById("input").oninput = function() {
+    var pos = document.getElementById("input").selectionStart;
     highlight();
+    setCaretPosition("input", pos);
+  }
+  
+  function setCaretPosition(elemId, caretPos) {
+    var elem = document.getElementById(elemId);
+
+    if(elem != null) {
+        if(elem.createTextRange) {
+            var range = elem.createTextRange();
+            range.move('character', caretPos);
+            range.select();
+        }
+        else {
+            if(elem.selectionStart) {
+                elem.focus();
+                elem.setSelectionRange(caretPos, caretPos);
+            }
+            else
+                elem.focus();
+        }
+    }
   }
 </script>
 </html>

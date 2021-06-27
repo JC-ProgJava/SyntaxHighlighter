@@ -663,4 +663,5 @@ function highlight() {
     var output = parser.parse();
     code[i].innerHTML = output;
   }
+  return 0;
 }

@@ -1,0 +1,5 @@
+/**/
+// The above should be rendered (by default) in green
+// not yellow (which is for javadoc comments)
+/** /*/
+// This should render as javadoc

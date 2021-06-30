@@ -1,0 +1,23 @@
+// <h1>Hi!</h1>
+/*
+    <em>Testing...</em>
+*/
+
+String html = "<h1>This shouldn't be rendered in HTML.</h1>";
+String codeHTMLAndCSS = """
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <title>Page Title</title>
+        <style>""" +
+        output[1] +
+        """
+                </style>
+                </head>
+                <body>
+                """
+        + output[0] +
+        """
+                </body>
+                </html>
+                """;

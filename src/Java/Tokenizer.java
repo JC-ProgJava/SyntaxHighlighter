@@ -56,6 +56,10 @@ public class Tokenizer {
 
   public ArrayList<Token> tokenize(String code) {
     sourceCode = code;
+    if (sourceCode.charAt(sourceCode.length() - 1) != '\n') {
+      sourceCode += "\n";
+    }
+
     while (notAtEnd()) {
       char currentChar = sourceCode.charAt(current);
       if (isAlphabet(currentChar)) {
@@ -63,10 +67,10 @@ public class Tokenizer {
           col++;
           current++;
         }
-        if (keywords.contains(code.substring(start, current + 1))) {
-          tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.KEYWORD));
+        if (keywords.contains(sourceCode.substring(start, current + 1))) {
+          tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.KEYWORD));
         } else {
-          tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.IDENTIFIER));
+          tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.IDENTIFIER));
         }
       } else {
         if (isNumerical(currentChar)) {
@@ -79,24 +83,24 @@ public class Tokenizer {
             }
           }
 
-          tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.NUMBER));
+          tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.NUMBER));
         } else {
           switch (currentChar) {
             case ' ':
-              tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.SPACE));
+              tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.SPACE));
               break;
             case '\n':
-              tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.NEWLINE));
+              tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.NEWLINE));
               line++;
               col = -1;
               break;
             case '\t':
-              tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.TAB));
+              tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.TAB));
               break;
             case '@':
               annotation();
               current++;
-              tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.ANNOTATION));
+              tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.ANNOTATION));
               break;
             case '"':
               // Supports multiline strings
@@ -107,30 +111,30 @@ public class Tokenizer {
                 string();
               }
               current++;
-              tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.STRING));
+              tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.STRING));
               break;
             case '\'':
               character();
               current++;
-              tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.STRING));
+              tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.STRING));
               break;
             case '/':
               if (peek() == '/') {
                 comment();
                 current++;
-                tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.STRING));
+                tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.STRING));
               } else if (peek() == '*') {
                 if (peekNext() != '*' || peekAfterNext() == '/') {
                   multilineComment();
                   current++;
-                  tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.STRING));
+                  tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.STRING));
                 } else {
                   multilineComment();
                   current++;
-                  tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.JAVADOC));
+                  tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.JAVADOC));
                 }
               } else {
-                tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.OTHERPUNCTUATION));
+                tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.OTHERPUNCTUATION));
               }
               break;
             case ';':
@@ -156,7 +160,7 @@ public class Tokenizer {
             case ':':
             case '^':
             case '.':
-              tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.OTHERPUNCTUATION));
+              tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.OTHERPUNCTUATION));
               break;
             default:
               System.err.println("Could not interpret character: '" + currentChar + "'. [ln: " + line + "]");

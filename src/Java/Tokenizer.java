@@ -1,84 +1,45 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
 public class Tokenizer {
+  private static final ArrayList<Token> tokens = new ArrayList<>();
+  private static final ArrayList<String> keywords = new ArrayList<>();
   private static int line = 1;
   private static int col = 0;
   private static int start = 0;
   private static int current = 0;
-  private static ArrayList<Token> tokens = new ArrayList<>();
   private static String sourceCode = "";
-  private static ArrayList<String> keywords = new ArrayList<>();
 
-  public Tokenizer() {
-    keywords.add("abstract");
-    keywords.add("assert");
-    keywords.add("boolean");
-    keywords.add("break");
-    keywords.add("byte");
-    keywords.add("case");
-    keywords.add("catch");
-    keywords.add("char");
-    keywords.add("class");
-    keywords.add("continue");
-    keywords.add("const");
-    keywords.add("default");
-    keywords.add("do");
-    keywords.add("double");
-    keywords.add("else");
-    keywords.add("enum");
-    keywords.add("exports");
-    keywords.add("extends");
-    keywords.add("final");
-    keywords.add("finally");
-    keywords.add("float");
-    keywords.add("for");
-    keywords.add("goto");
-    keywords.add("if");
-    keywords.add("implements");
-    keywords.add("import");
-    keywords.add("instanceof");
-    keywords.add("int");
-    keywords.add("interface");
-    keywords.add("long");
-    keywords.add("module");
-    keywords.add("native");
-    keywords.add("new");
-    keywords.add("non-sealed");
-    keywords.add("package");
-    keywords.add("private");
-    keywords.add("protected");
-    keywords.add("public");
-    keywords.add("requires");
-    keywords.add("return");
-    keywords.add("short");
-    keywords.add("static");
-    keywords.add("strictfp");
-    keywords.add("super");
-    keywords.add("switch");
-    keywords.add("synchronized");
-    keywords.add("this");
-    keywords.add("throw");
-    keywords.add("throws");
-    keywords.add("transient");
-    keywords.add("try");
-    keywords.add("var");
-    keywords.add("void");
-    keywords.add("volatile");
-    keywords.add("while");
-    keywords.add("yield");
-    keywords.add("sealed");
-    keywords.add("record");
-    keywords.add("permits");
+  public Tokenizer(String programmingLanguage) {
+    String[] keys;
+    switch (programmingLanguage) {
+      case "Java" -> keys = new String[]{
+              "abstract", "assert", "boolean", "break", "byte", "case",
+              "catch", "char", "class", "continue", "const", "default",
+              "do", "double", "else", "enum", "exports", "extends", "final",
+              "finally", "float", "for", "goto", "if", "implements", "import",
+              "instanceof", "int", "interface", "long", "module", "native",
+              "new", "non-sealed", "package", "private", "protected", "public",
+              "requires", "return", "short", "static", "strictfp", "super",
+              "switch", "synchronized", "this", "throw", "throws", "transient",
+              "try", "var", "void", "volatile", "while", "yield", "sealed", "record",
+              "permits", "true", "false", "null", "System"
+      };
 
-    // literals
-    keywords.add("true");
-    keywords.add("false");
-    keywords.add("null");
-    keywords.add("System");
+      case "Python" -> keys = new String[]{
+              // todo
+      };
+      default -> throw new IllegalStateException("Unexpected programming language name: " + programmingLanguage);
+    }
+    keywords.addAll(Arrays.asList(keys));
   }
 
   private static char peek() {
-    return sourceCode.charAt(current + 1);
+    if (current + 1 < sourceCode.length()) {
+      return sourceCode.charAt(current + 1);
+    } else {
+      return '\0';
+    }
   }
 
   private static boolean isAlphabet(char currentChar) {
@@ -89,16 +50,16 @@ public class Tokenizer {
     return String.valueOf(currentChar).matches("[a-zA-Z_$0-9]");
   }
 
-  private static boolean isAtEnd() {
-    return current >= sourceCode.length();
+  private static boolean notAtEnd() {
+    return current < sourceCode.length();
   }
 
   public ArrayList<Token> tokenize(String code) {
     sourceCode = code;
-    while (!isAtEnd()) {
+    while (notAtEnd()) {
       char currentChar = sourceCode.charAt(current);
       if (isAlphabet(currentChar)) {
-        while (!isAtEnd() && isIdentifierEnding(peek())) {
+        while (notAtEnd() && isIdentifierEnding(peek())) {
           col++;
           current++;
         }
@@ -107,12 +68,9 @@ public class Tokenizer {
         } else {
           tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.IDENTIFIER));
         }
-        col++;
-        current++;
-        start = current;
       } else {
         if (isNumerical(currentChar)) {
-          while (!isAtEnd()) {
+          while (notAtEnd()) {
             if (isNumerical(peek()) || peek() == '.') {
               col++;
               current++;
@@ -162,7 +120,7 @@ public class Tokenizer {
                 current++;
                 tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.STRING));
               } else if (peek() == '*') {
-                if (peekNext() != '*') {
+                if (peekNext() != '*' || peekAfterNext() == '/') {
                   multilineComment();
                   current++;
                   tokens.add(new Token(code.substring(start, current + 1), line, col, TokenType.STRING));
@@ -206,10 +164,10 @@ public class Tokenizer {
           }
 
         }
-        col++;
-        current++;
-        start = current;
       }
+      col++;
+      current++;
+      start = current;
     }
 
     for (int index = 0; index < tokens.size(); index++) {
@@ -223,7 +181,7 @@ public class Tokenizer {
         }
       } else if (tokens.get(index).type == TokenType.IDENTIFIER || tokens.get(index).text.matches("[])}]")) {
         current = index;
-        if (!isAtEnd() && tokens.size() > index + 1 && tokens.get(index + 1).text.equals(".")) {
+        if (notAtEnd() && tokens.size() > index + 1 && tokens.get(index + 1).text.equals(".")) {
           int indexStart = index + 1;
           while (tokens.get(indexStart).type != TokenType.OTHERPUNCTUATION || tokens.get(indexStart).text.equals(".")) {
             if (tokens.get(indexStart).text.equals(".")) {
@@ -248,8 +206,16 @@ public class Tokenizer {
     return tokens;
   }
 
+  private char peekAfterNext() {
+    if (current + 3 < sourceCode.length()) {
+      return sourceCode.charAt(current + 3);
+    } else {
+      return '\0';
+    }
+  }
+
   private void annotation() {
-    while (!isAtEnd()) {
+    while (notAtEnd()) {
       if (peek() == ' ') {
         break;
       } else if (peek() == '\n') {
@@ -262,7 +228,7 @@ public class Tokenizer {
   }
 
   private void multilineString() {
-    while (!isAtEnd()) {
+    while (notAtEnd()) {
       if (sourceCode.charAt(current) == '"' && peek() == '"' && peekNext() == '"') {
         if ((current - 1 >= 0 && sourceCode.charAt(current - 1) != '\\') || current == 0) {
           break;
@@ -278,7 +244,7 @@ public class Tokenizer {
   }
 
   private void multilineComment() {
-    while (!isAtEnd()) {
+    while (notAtEnd()) {
       if (peek() == '*' && peekNext() == '/') {
         break;
       } else if (peek() == '\n') {
@@ -292,7 +258,11 @@ public class Tokenizer {
   }
 
   private char peekNext() {
-    return sourceCode.charAt(current + 2);
+    if (current + 2 < sourceCode.length()) {
+      return sourceCode.charAt(current + 2);
+    } else {
+      return '\0';
+    }
   }
 
   private boolean isUppercase(String text) {
@@ -300,21 +270,21 @@ public class Tokenizer {
   }
 
   private void comment() {
-    while (!isAtEnd() && peek() != '\n') {
+    while (notAtEnd() && peek() != '\n') {
       col++;
       current++;
     }
   }
 
   private void character() {
-    while (!isAtEnd() && (peek() != '\'' || (sourceCode.charAt(current) == '\\' && sourceCode.charAt(current - 1) != '\\'))) {
+    while (notAtEnd() && (peek() != '\'' || (sourceCode.charAt(current) == '\\' && sourceCode.charAt(current - 1) != '\\'))) {
       col++;
       current++;
     }
   }
 
   private void string() {
-    while (!isAtEnd() && (peek() != '"' || (sourceCode.charAt(current) == '\\' && sourceCode.charAt(current - 1) != '\\'))) {
+    while (notAtEnd() && (peek() != '"' || (sourceCode.charAt(current) == '\\' && sourceCode.charAt(current - 1) != '\\'))) {
       col++;
       current++;
     }

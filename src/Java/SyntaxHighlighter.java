@@ -13,7 +13,7 @@ public class SyntaxHighlighter {
     long start = System.currentTimeMillis();
     try {
       String code = new String(Files.readAllBytes(Path.of(filepath)));
-      ArrayList<Token> tokens = new ArrayList<>(new Tokenizer().tokenize(code));
+      ArrayList<Token> tokens = new ArrayList<>(new Tokenizer("Java").tokenize(code));
 
       StringBuilder out = new StringBuilder();
       for (Token token : tokens) {

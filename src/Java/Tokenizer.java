@@ -288,7 +288,11 @@ public class Tokenizer {
   }
 
   private void string() {
-    while (notAtEnd() && (peek() != '"' || (sourceCode.charAt(current) == '\\' && sourceCode.charAt(current - 1) != '\\'))) {
+    while (notAtEnd() && (peek() != '"' || sourceCode.charAt(current) == '\\')) {
+      if (sourceCode.charAt(current) == '\\' && peek() == '\\') {
+        col += 2;
+        current += 2;
+      }
       col++;
       current++;
     }

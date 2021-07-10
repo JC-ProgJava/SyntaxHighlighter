@@ -1,0 +1,5 @@
+a.function("\\\")function")
+a.function("")
+a.function("\"")
+a.function("\\ \"")
+String test = "\"\"\\\"\"\"\\\"\"";

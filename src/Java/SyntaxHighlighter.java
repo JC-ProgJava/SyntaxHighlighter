@@ -13,7 +13,7 @@ public class SyntaxHighlighter {
     long start = System.currentTimeMillis();
     try {
       String code = new String(Files.readAllBytes(Path.of(filepath)));
-      ArrayList<Token> tokens = new ArrayList<>(new Tokenizer("Java").tokenize(code));
+      ArrayList<Token> tokens = new ArrayList<>(new Tokenizer().tokenize(code));
 
       StringBuilder out = new StringBuilder();
       for (Token token : tokens) {
@@ -22,7 +22,7 @@ public class SyntaxHighlighter {
 
       System.out.println("If the below tests output false, please file an issue in the Github repository.");
       System.out.println("Input matches output: " + out.toString().trim().equals(code.trim()));
-      Parser parser = new Parser(tokens);
+      Parser parser = new Parser(tokens, "AtomOneDark");
       String[] output = parser.parse();
       System.out.println("Parser matches input: " + output[2].trim().equals(code.trim()));
       System.out.println("-".repeat(40));

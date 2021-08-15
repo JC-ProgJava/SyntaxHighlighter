@@ -11,5 +11,10 @@ public enum TokenType {
   //       '+', '-', '/', '%', '!', '~', '&', '|'
   //       '?', ':', '^', '.', '''
   JAVADOC, // javadoc comments (highlighted in orange by default)
-  ANNOTATION // annotations (i.e., @Override)
+  ANNOTATION, // annotations (i.e., @Override)
+  METHODNAME, // i.e., add() {} ('add')
+  COMMENT, // i.e., '//' or '/**/'
+  CLASSNAME, // i.e., class Head {} ('Head')
+  DATATYPE,  // i.e., Short, Double, String
+  LITERAL // i.e., null, true, false
 }

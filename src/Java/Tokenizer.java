@@ -4,34 +4,46 @@ import java.util.Arrays;
 public class Tokenizer {
   private static final ArrayList<Token> tokens = new ArrayList<>();
   private static final ArrayList<String> keywords = new ArrayList<>();
+  private static final ArrayList<String> literals = new ArrayList<>();
+  private static final ArrayList<String> dataTypes = new ArrayList<>();
+  private static final ArrayList<String> classKeywords = new ArrayList<>();
   private static int line = 1;
-  private static int col = 0;
+  private static int col = 1;
   private static int start = 0;
   private static int current = 0;
   private static String sourceCode = "";
 
-  public Tokenizer(String programmingLanguage) {
-    String[] keys;
-    switch (programmingLanguage) {
-      case "Java" -> keys = new String[]{
-              "abstract", "assert", "boolean", "break", "byte", "case",
-              "catch", "char", "class", "continue", "const", "default",
-              "do", "double", "else", "enum", "exports", "extends", "final",
-              "finally", "float", "for", "goto", "if", "implements", "import",
-              "instanceof", "int", "interface", "long", "module", "native",
-              "new", "non-sealed", "package", "private", "protected", "public",
-              "requires", "return", "short", "static", "strictfp", "super",
-              "switch", "synchronized", "this", "throw", "throws", "transient",
-              "try", "var", "void", "volatile", "while", "yield", "sealed", "record",
-              "permits", "true", "false", "null", "System"
+  public Tokenizer() {
+    String[] keys = new String[]{
+        "abstract", "assert", "boolean", "break", "byte", "case",
+        "catch", "char", "class", "continue", "const", "default",
+        "do", "double", "else", "enum", "exports", "extends", "final",
+        "finally", "float", "for", "goto", "if", "implements", "import",
+        "instanceof", "int", "interface", "long", "module", "native",
+        "new", "non-sealed", "package", "private", "protected", "public",
+        "requires", "return", "short", "static", "strictfp", "super",
+        "switch", "synchronized", "this", "throw", "throws", "transient",
+        "try", "var", "void", "volatile", "while", "yield", "sealed", "record",
+        "permits", "System"
       };
-
-      case "Python" -> keys = new String[]{
-              // todo
-      };
-      default -> throw new IllegalStateException("Unexpected programming language name: " + programmingLanguage);
-    }
     keywords.addAll(Arrays.asList(keys));
+    String[] lit = new String[]{
+            "true", "false", "null"
+    };
+    literals.addAll(Arrays.asList(lit));
+
+
+    String[] dataType = new String[]{
+            "Byte", "Short", "Integer", "Long", "Float",
+            "Double", "Boolean", "Character"
+    };
+    dataTypes.addAll(Arrays.asList(dataType));
+
+
+    String[] classKeys = new String[]{
+            "class", "interface", "enum", "extends", "implements"
+    };
+    classKeywords.addAll(Arrays.asList(classKeys));
   }
 
   private static char peek() {
@@ -69,6 +81,10 @@ public class Tokenizer {
         }
         if (keywords.contains(sourceCode.substring(start, current + 1))) {
           tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.KEYWORD));
+        } else if (literals.contains(sourceCode.substring(start, current + 1))) {
+          tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.LITERAL));
+        } else if (dataTypes.contains(sourceCode.substring(start, current + 1))) {
+          tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.DATATYPE));
         } else {
           tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.IDENTIFIER));
         }
@@ -92,7 +108,7 @@ public class Tokenizer {
             case '\n':
               tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.NEWLINE));
               line++;
-              col = -1;
+              col = 0;
               break;
             case '\t':
               tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.TAB));
@@ -122,12 +138,12 @@ public class Tokenizer {
               if (peek() == '/') {
                 comment();
                 current++;
-                tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.STRING));
+                tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.COMMENT));
               } else if (peek() == '*') {
                 if (peekNext() != '*' || peekAfterNext() == '/') {
                   multilineComment();
                   current++;
-                  tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.STRING));
+                  tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.COMMENT));
                 } else {
                   multilineComment();
                   current++;
@@ -166,7 +182,6 @@ public class Tokenizer {
               System.err.println("Could not interpret character: '" + currentChar + "'. [ln: " + line + "]");
               break;
           }
-
         }
       }
       col++;
@@ -179,13 +194,12 @@ public class Tokenizer {
         int indexStart = index + 1;
         while (!tokens.get(indexStart).text.equals(";")) {
           Token token = tokens.get(indexStart);
-          tokens.add(indexStart, new Token(token.text, token.line, token.col, TokenType.IMPORTNAME));
-          tokens.remove(indexStart + 1);
+          tokens.set(indexStart, new Token(token.text, token.line, token.col, TokenType.IMPORTNAME));
           indexStart++;
         }
       } else if (tokens.get(index).type == TokenType.IDENTIFIER || tokens.get(index).text.matches("[])}]")) {
-        current = index;
-        if (notAtEnd() && tokens.size() > index + 1 && tokens.get(index + 1).text.equals(".")) {
+        current = tokens.get(index).col;
+        if (tokens.size() > index + 1 && tokens.get(index + 1).text.equals(".")) {
           int indexStart = index + 1;
           while (tokens.get(indexStart).type != TokenType.OTHERPUNCTUATION || tokens.get(indexStart).text.equals(".")) {
             if (tokens.get(indexStart).text.equals(".")) {
@@ -193,17 +207,28 @@ public class Tokenizer {
               continue;
             }
             Token token = tokens.get(indexStart);
-            tokens.add(indexStart, new Token(token.text, token.line, token.col, TokenType.HEADDATATYPE));
-            tokens.remove(indexStart + 1);
+            tokens.set(indexStart, new Token(token.text, token.line, token.col, TokenType.HEADDATATYPE));
             indexStart++;
           }
         }
       }
 
+      if ((tokens.get(index).type == TokenType.IDENTIFIER || tokens.get(index).type == TokenType.HEADDATATYPE) && tokens.get(index + 1).text.equals("(")) {
+        Token token = tokens.get(index);
+        tokens.set(index, new Token(token.text, token.line, token.col, TokenType.METHODNAME));
+      }
+
+      if (index - 1 > 0 && classKeywords.contains(tokens.get(index - 1).text)) {
+        while (tokens.get(index).type == TokenType.SPACE || tokens.get(index).type == TokenType.NEWLINE || tokens.get(index).type == TokenType.TAB) {
+          index++;
+        }
+        Token token = tokens.get(index);
+        tokens.set(index, new Token(token.text, token.line, token.col, TokenType.CLASSNAME));
+      }
+
       if (isUppercase(tokens.get(index).text) && (tokens.get(index).type == TokenType.HEADDATATYPE || tokens.get(index).type == TokenType.IDENTIFIER)) {
         Token token = tokens.get(index);
-        tokens.add(index, new Token(token.text, token.line, token.col, TokenType.CONSTANT));
-        tokens.remove(index + 1);
+        tokens.set(index, new Token(token.text, token.line, token.col, TokenType.CONSTANT));
       }
     }
 
@@ -224,6 +249,7 @@ public class Tokenizer {
         break;
       } else if (peek() == '\n') {
         line++;
+        col = 1;
         break;
       }
       col++;
@@ -239,6 +265,7 @@ public class Tokenizer {
         }
       } else if (peek() == '\n') {
         line++;
+        col = 1;
       }
       col++;
       current++;
@@ -253,6 +280,7 @@ public class Tokenizer {
         break;
       } else if (peek() == '\n') {
         line++;
+        col = 1;
       }
       col++;
       current++;
@@ -282,9 +310,13 @@ public class Tokenizer {
 
   private void character() {
     while (notAtEnd() && (peek() != '\'' || sourceCode.charAt(current) == '\\')) {
-      if (sourceCode.charAt(current) == '\\' && peek() == '\\') {
-        col += 2;
-        current += 2;
+      if (sourceCode.charAt(current) == '\\') {
+        col++;
+        current++;
+        if (peek() == '\'') {
+          break;
+        }
+        continue;
       }
       col++;
       current++;
@@ -293,9 +325,13 @@ public class Tokenizer {
 
   private void string() {
     while (notAtEnd() && (peek() != '"' || sourceCode.charAt(current) == '\\')) {
-      if (sourceCode.charAt(current) == '\\' && peek() == '\\') {
-        col += 2;
-        current += 2;
+      if (sourceCode.charAt(current) == '\\') {
+        col++;
+        current++;
+        if (peek() == '"') {
+          break;
+        }
+        continue;
       }
       col++;
       current++;

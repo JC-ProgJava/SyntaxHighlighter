@@ -20,6 +20,13 @@ a {
 </head>
 <body>
 <a target="_blank" href="https://github.com/JC-ProgJava/SyntaxHighlighter">Uses this tool</a>
+  
+<select name="theme" id="theme" onchange="highlight(document.getElementById('theme').value + '')">
+  <option value="Normal">Normal</option>
+  <option value="AtomOneDark">Atom One Dark</option>
+  <option value="Exotic">Exotic</option>
+</select>
+  
 <br><br>
 <div onblur="this.focus();" id="input" style="float: left;" contenteditable="true">import java.util.Scanner;
 

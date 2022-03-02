@@ -20,7 +20,7 @@ a {
 </head>
 <body>
 <a target="_blank" href="https://github.com/JC-ProgJava/SyntaxHighlighter">Uses this tool</a>
-  
+<br>
 <select name="theme" id="theme" onchange="highlight(document.getElementById('theme').value + '')">
   <option value="Normal">Normal</option>
   <option value="AtomOneDark">Atom One Dark</option>
@@ -56,7 +56,7 @@ public class Test {
 <script>
   document.getElementById("input").addEventListener("input", function() {
     document.getElementById("output").innerText = document.getElementById("input").innerText;
-    highlight("Normal");
+    highlight(document.getElementById('theme').value + '');
   });
 </script>
 </html>

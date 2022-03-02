@@ -24,7 +24,7 @@ You can take a look at example output files [here](https://github.com/JC-ProgJav
 
 ### Features
 - Support for Java 16 (multiline strings, records, new keywords [permits, record, sealed, non-sealed])
-- Customizable (through the JS version (find the CSS selector values at the bottom of the source file). You can also customize the Java version by tweaking the CSS selector values. See what the different classes represent [here](https://github.com/JC-ProgJava/SyntaxHighlighter/blob/main/src/Java/TokenType.java))
+- Customizable (through the JS version (find the CSS selector values at the bottom of the source file). You can also customize the Java version by tweaking the CSS selector values. See what the different token types represent [here](https://github.com/JC-ProgJava/SyntaxHighlighter/blob/main/src/Java/TokenType.java))
 - Simple and small: the entire JS script file (that includes CSS styling) is less than 700 lines long (~16KB). After minification and zipping, the file only takes up **2KB** of space.
 
 ### Why use this syntax highlighter?

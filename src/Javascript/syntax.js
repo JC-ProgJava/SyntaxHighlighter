@@ -31,7 +31,7 @@ class Parser {
     constructor(tokens, style) {
         this.tokens = tokens;
         this.styles["Normal"] = [
-            "inherit",
+            "rgb(244, 242, 240)",
             "#003399; font-weight: bold",
             "black",
             "#1740E6",
@@ -73,8 +73,8 @@ class Parser {
             "#C3301E",
         ];
         this.styles["AtomOneDark"] = [
-            "#282C34; font-family: 'Consolas', monospace",
-            "#C678DD;",
+            "#282C34",
+            "#C678DD; font-weight: normal",
             "#abb2bf",
             "#d19a66",
             "#98c379",
@@ -90,7 +90,7 @@ class Parser {
             "#61aeee",
             "#5c6370; font-style: italic",
             "#d19a66",
-            "#56b6c2",
+            "#56b6c2; font-weight: normal",
             "#e6c07b",
         ];
         this.style = style;
@@ -660,6 +660,10 @@ class Tokenizer {
                             indexstart++;
                             continue;
                         }
+
+                        if (indexstart + 1 === this.tokens.length) {
+                            break;
+                        }
                         let token = this.tokens[indexstart];
                         this.tokens.splice(
                             indexstart,
@@ -857,16 +861,21 @@ const style = document.createElement("style");
 
 head.appendChild(style);
 
+window.addEventListener('load', function () {
+    highlight("Normal");
+});
+
 function highlight(theme) {
     let code = document.getElementsByTagName("code");
     let css;
-    for (let i = 0; i < 7; i++) {
+    for (let i = 0; i < code.length; i++) {
         let tokensList = new Tokenizer().tokenize(code[i].innerText);
         let parser = new Parser(tokensList, theme);
         let output = parser.parse();
         css = output[1];
         code[i].innerHTML = output[0];
     }
+
     style.appendChild(document.createTextNode(css));
 }
 
@@ -879,5 +888,6 @@ function setTheme(theme) {
             styles[index]
         );
     }
+
     style.appendChild(document.createTextNode(stylesheet));
 }

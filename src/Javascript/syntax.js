@@ -403,7 +403,7 @@ class Tokenizer {
                 }
                 if (
                     this.keywords.includes(
-                        this.sourceCode.substring(this.start, this.current + 1)
+                        this.sourceCode.substring(this.start, this.current + 1).trim()
                     )
                 ) {
                     this.tokens.push(
@@ -416,7 +416,7 @@ class Tokenizer {
                     );
                 } else if (
                     this.literals.includes(
-                        this.sourceCode.substring(this.start, this.current + 1)
+                        this.sourceCode.substring(this.start, this.current + 1).trim()
                     )
                 ) {
                     this.tokens.push(
@@ -429,7 +429,7 @@ class Tokenizer {
                     );
                 } else if (
                     this.dataTypes.includes(
-                        this.sourceCode.substring(this.start, this.current + 1)
+                        this.sourceCode.substring(this.start, this.current + 1).trim()
                     )
                 ) {
                     this.tokens.push(

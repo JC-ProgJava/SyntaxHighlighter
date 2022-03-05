@@ -79,11 +79,11 @@ public class Tokenizer {
           col++;
           current++;
         }
-        if (keywords.contains(sourceCode.substring(start, current + 1))) {
+        if (keywords.contains(sourceCode.substring(start, current + 1).trim())) {
           tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.KEYWORD));
-        } else if (literals.contains(sourceCode.substring(start, current + 1))) {
+        } else if (literals.contains(sourceCode.substring(start, current + 1).trim())) {
           tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.LITERAL));
-        } else if (dataTypes.contains(sourceCode.substring(start, current + 1))) {
+        } else if (dataTypes.contains(sourceCode.substring(start, current + 1).trim())) {
           tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.DATATYPE));
         } else {
           tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.IDENTIFIER));

@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Page Title</title>
+<style>  code {
+    display: block;
+    background-color: #282C34; font-family: 'Consolas', monospace;
+  }
+
+  span {
+    display: inline;
+    white-space: pre;
+  }
+
+  .keyword {
+    color: #C678DD;;
+  }
+
+  .identifier {
+    color: #abb2bf;
+  }
+
+  .number {
+    color: #d19a66;
+  }
+
+  .string {
+    color: #98c379;
+  }
+
+  .space {
+    color: #abb2bf;
+  }
+
+  .newline {
+    color: #abb2bf;
+  }
+
+  .tab {
+    color: #abb2bf;
+  }
+
+  .importname {
+    color: #C678DD;
+  }
+
+  .headdatatype {
+    color: #abb2bf;
+  }
+
+  .otherpunctuation {
+    color: #abb2bf;
+  }
+
+  .constant {
+    color: #d19a66;
+  }
+
+  .javadoc {
+    color: #5c6370; font-style: italic;
+  }
+
+  .annotation {
+    color: #c678dd;
+  }
+
+  .methodname {
+    color: #61aeee;
+  }
+
+  .comment {
+    color: #5c6370; font-style: italic;
+  }
+
+  .datatype {
+    color: #d19a66;
+  }
+
+  .literal {
+    color: #56b6c2;
+  }
+
+  .classname {
+    color: #e6c07b;
+  }
+</style>
+</head>
+<body>
+<code><span class="keyword">import</span><span class="importname">&nbsp;java</span><span class="importname">.</span><span class="importname">util</span><span class="importname">.</span><span class="importname">ArrayList</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="keyword">import</span><span class="importname">&nbsp;java</span><span class="importname">.</span><span class="importname">util</span><span class="importname">.</span><span class="importname">HashMap</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="newline"><br /></span><span class="keyword">public</span><span class="keyword">&nbsp;class</span><span class="identifier">&nbsp;Parser</span><span class="otherpunctuation">&nbsp;&lbrace;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;ArrayList</span><span class="otherpunctuation">&lt;</span><span class="identifier">Token</span><span class="otherpunctuation">&gt;</span><span class="identifier">&nbsp;tokens</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;String</span><span class="identifier">&nbsp;outCodeHTML</span><span class="otherpunctuation">&nbsp;=</span><span class="string">&nbsp;""</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;String</span><span class="identifier">&nbsp;outCodeCSS</span><span class="otherpunctuation">&nbsp;=</span><span class="string">&nbsp;""</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;String</span><span class="identifier">&nbsp;outPlain</span><span class="otherpunctuation">&nbsp;=</span><span class="string">&nbsp;""</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;HashMap</span><span class="otherpunctuation">&lt;</span><span class="identifier">String</span><span class="otherpunctuation">,</span><span class="identifier">&nbsp;String</span><span class="otherpunctuation">[</span><span class="otherpunctuation">]</span><span class="otherpunctuation">&gt;</span><span class="identifier">&nbsp;styles</span><span class="otherpunctuation">&nbsp;=</span><span class="keyword">&nbsp;new</span><span class="identifier">&nbsp;HashMap</span><span class="otherpunctuation">&lt;</span><span class="otherpunctuation">&gt;</span><span class="otherpunctuation">(</span><span class="otherpunctuation">)</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;String</span><span class="identifier">&nbsp;style</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="newline"><br /></span><span class="keyword">&nbsp;&nbsp;public</span><span class="methodname">&nbsp;Parser</span><span class="otherpunctuation">(</span><span class="identifier">ArrayList</span><span class="otherpunctuation">&lt;</span><span class="identifier">Token</span><span class="otherpunctuation">&gt;</span><span class="identifier">&nbsp;tokens</span><span class="otherpunctuation">,</span><span class="identifier">&nbsp;String</span><span class="identifier">&nbsp;style</span><span class="otherpunctuation">)</span><span class="otherpunctuation">&nbsp;&lbrace;</span><span class="newline"><br /></span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;this</span><span class="otherpunctuation">.</span><span class="identifier">tokens</span><span class="otherpunctuation">&nbsp;=</span><span class="identifier">&nbsp;tokens</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;&nbsp;&nbsp;styles</span><span class="otherpunctuation">.</span><span class="methodname">put</span><span class="otherpunctuation">(</span><span class="string">"Normal"</span><span class="otherpunctuation">,</span><span class="keyword">&nbsp;new</span><span class="identifier">&nbsp;String</span><span class="otherpunctuation">[</span><span class="otherpunctuation">]</span><span class="otherpunctuation">&lbrace;</span><span class="newline"><br /></span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"inherit"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;code&nbsp;background-color
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#003399;&nbsp;font-weight:&nbsp;bold"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;keyword
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"black"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;&nbsp;&nbsp;//&nbsp;identifier
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#1740E6"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;number
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#106B10"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;string
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"black"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;&nbsp;&nbsp;//&nbsp;space
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"black"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;&nbsp;&nbsp;//&nbsp;newline
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"black"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;&nbsp;&nbsp;//&nbsp;tab
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#006699"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;importname
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#034524"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;headdatatype
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"black"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;&nbsp;&nbsp;//&nbsp;otherpunctuation
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#660E7A"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;constant
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#bf8f1d"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;javadoc
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#808000"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;annotation
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"black"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;&nbsp;&nbsp;//&nbsp;methodname
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#106B10"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;comment
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"black"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;datatype
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#003399;&nbsp;font-weight:&nbsp;bold"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;literal
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"black"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;classname
+</span><span class="otherpunctuation">&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="otherpunctuation">)</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;&nbsp;&nbsp;styles</span><span class="otherpunctuation">.</span><span class="methodname">put</span><span class="otherpunctuation">(</span><span class="string">"Exotic"</span><span class="otherpunctuation">,</span><span class="keyword">&nbsp;new</span><span class="identifier">&nbsp;String</span><span class="otherpunctuation">[</span><span class="otherpunctuation">]</span><span class="otherpunctuation">&lbrace;</span><span class="newline"><br /></span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"inherit"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;code&nbsp;background-color
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#136F75;&nbsp;font-weight:&nbsp;bold"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;keyword
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#C3301E"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;identifier
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#1F5D15"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;number
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#8A2428"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;string
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"black"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;&nbsp;&nbsp;//&nbsp;space
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"black"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;&nbsp;&nbsp;//&nbsp;newline
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"black"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;&nbsp;&nbsp;//&nbsp;tab
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#2E690A"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;importname
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#BF005C"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;headdatatype
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#940066"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;otherpunctuation
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#2E690A"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;constant
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#8A2428"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;javadoc
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#8A2428"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;annotation
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#8A07B3"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;methodname
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#8A2428"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;comment
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#C3301E"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;datatype
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#136F75;&nbsp;font-weight:&nbsp;bold"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;literal
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#C3301E"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;classname
+</span><span class="otherpunctuation">&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="otherpunctuation">)</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;&nbsp;&nbsp;styles</span><span class="otherpunctuation">.</span><span class="methodname">put</span><span class="otherpunctuation">(</span><span class="string">"AtomOneDark"</span><span class="otherpunctuation">,</span><span class="keyword">&nbsp;new</span><span class="identifier">&nbsp;String</span><span class="otherpunctuation">[</span><span class="otherpunctuation">]</span><span class="otherpunctuation">&lbrace;</span><span class="newline"><br /></span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#282C34;&nbsp;font-family:&nbsp;'Consolas',&nbsp;monospace"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;code&nbsp;background-color
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#C678DD;"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;keyword
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#abb2bf"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;identifier
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#d19a66"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;number
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#98c379"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;string
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#abb2bf"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;&nbsp;&nbsp;//&nbsp;space
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#abb2bf"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;&nbsp;&nbsp;//&nbsp;newline
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#abb2bf"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;&nbsp;&nbsp;//&nbsp;tab
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#C678DD"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;importname
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#abb2bf"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;headdatatype
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#abb2bf"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;otherpunctuation
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#d19a66"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;constant
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#5c6370;&nbsp;font-style:&nbsp;italic"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;javadoc
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#c678dd"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;annotation
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#61aeee"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;methodname
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#5c6370;&nbsp;font-style:&nbsp;italic"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;comment
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#d19a66"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;datatype
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#56b6c2"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;literal
+</span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"#e6c07b"</span><span class="otherpunctuation">,</span><span class="comment">&nbsp;//&nbsp;classname
+</span><span class="otherpunctuation">&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="otherpunctuation">)</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;this</span><span class="otherpunctuation">.</span><span class="identifier">style</span><span class="otherpunctuation">&nbsp;=</span><span class="identifier">&nbsp;style</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="otherpunctuation">&nbsp;&nbsp;}</span><span class="newline"><br /></span><span class="newline"><br /></span><span class="keyword">&nbsp;&nbsp;public</span><span class="identifier">&nbsp;String</span><span class="otherpunctuation">[</span><span class="otherpunctuation">]</span><span class="methodname">&nbsp;parse</span><span class="otherpunctuation">(</span><span class="otherpunctuation">)</span><span class="otherpunctuation">&nbsp;&lbrace;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;&nbsp;&nbsp;String</span><span class="identifier">&nbsp;stylesheet</span><span class="otherpunctuation">&nbsp;=</span><span class="string">&nbsp;"""
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;code&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;block;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;background-color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;span&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;display:&nbsp;inline;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;white-space:&nbsp;pre;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.keyword&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.identifier&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.number&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.string&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.space&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.newline&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.tab&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.importname&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.headdatatype&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.otherpunctuation&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.constant&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.javadoc&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.annotation&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.methodname&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.comment&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.datatype&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.literal&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;.classname&nbsp;&lbrace;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;color:&nbsp;%s;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"""</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;&nbsp;&nbsp;outCodeCSS</span><span class="otherpunctuation">&nbsp;=</span><span class="identifier">&nbsp;String</span><span class="otherpunctuation">.</span><span class="methodname">format</span><span class="otherpunctuation">(</span><span class="identifier">stylesheet</span><span class="otherpunctuation">,</span><span class="otherpunctuation">&nbsp;(</span><span class="identifier">Object</span><span class="otherpunctuation">[</span><span class="otherpunctuation">]</span><span class="otherpunctuation">)</span><span class="identifier">&nbsp;styles</span><span class="otherpunctuation">.</span><span class="methodname">get</span><span class="otherpunctuation">(</span><span class="identifier">style</span><span class="otherpunctuation">)</span><span class="otherpunctuation">)</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;&nbsp;&nbsp;outCodeHTML</span><span class="otherpunctuation">&nbsp;+</span><span class="otherpunctuation">=</span><span class="string">&nbsp;"&lt;code&gt;"</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;for</span><span class="otherpunctuation">&nbsp;(</span><span class="identifier">Token</span><span class="identifier">&nbsp;token</span><span class="otherpunctuation">&nbsp;:</span><span class="identifier">&nbsp;tokens</span><span class="otherpunctuation">)</span><span class="otherpunctuation">&nbsp;&lbrace;</span><span class="newline"><br /></span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;switch</span><span class="otherpunctuation">&nbsp;(</span><span class="identifier">token</span><span class="otherpunctuation">.</span><span class="headdatatype">type</span><span class="otherpunctuation">.</span><span class="methodname">toString</span><span class="otherpunctuation">(</span><span class="otherpunctuation">)</span><span class="otherpunctuation">)</span><span class="otherpunctuation">&nbsp;&lbrace;</span><span class="newline"><br /></span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case</span><span class="string">&nbsp;"KEYWORD"</span><span class="otherpunctuation">,</span><span class="string">&nbsp;"IDENTIFIER"</span><span class="otherpunctuation">,</span><span class="string">&nbsp;"NUMBER"</span><span class="otherpunctuation">,</span><span class="string">&nbsp;"STRING"</span><span class="otherpunctuation">,</span><span class="newline"><br /></span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"IMPORTNAME"</span><span class="otherpunctuation">,</span><span class="string">&nbsp;"HEADDATATYPE"</span><span class="otherpunctuation">,</span><span class="newline"><br /></span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"OTHERPUNCTUATION"</span><span class="otherpunctuation">,</span><span class="string">&nbsp;"JAVADOC"</span><span class="otherpunctuation">,</span><span class="newline"><br /></span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"ANNOTATION"</span><span class="otherpunctuation">,</span><span class="string">&nbsp;"CONSTANT"</span><span class="otherpunctuation">,</span><span class="string">&nbsp;"METHODNAME"</span><span class="otherpunctuation">,</span><span class="newline"><br /></span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"COMMENT"</span><span class="otherpunctuation">,</span><span class="string">&nbsp;"DATATYPE"</span><span class="otherpunctuation">,</span><span class="string">&nbsp;"LITERAL"</span><span class="otherpunctuation">,</span><span class="string">&nbsp;"CLASSNAME"</span><span class="otherpunctuation">&nbsp;-</span><span class="otherpunctuation">&gt;</span><span class="otherpunctuation">&nbsp;&lbrace;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outCodeHTML</span><span class="otherpunctuation">&nbsp;+</span><span class="otherpunctuation">=</span><span class="string">&nbsp;"&lt;span&nbsp;class=\""</span><span class="otherpunctuation">&nbsp;+</span><span class="identifier">&nbsp;token</span><span class="otherpunctuation">.</span><span class="headdatatype">type</span><span class="otherpunctuation">.</span><span class="methodname">toString</span><span class="otherpunctuation">(</span><span class="otherpunctuation">)</span><span class="otherpunctuation">.</span><span class="methodname">toLowerCase</span><span class="otherpunctuation">(</span><span class="otherpunctuation">)</span><span class="otherpunctuation">&nbsp;+</span><span class="string">&nbsp;"\"&gt;"</span><span class="otherpunctuation">&nbsp;+</span><span class="methodname">&nbsp;cleanse</span><span class="otherpunctuation">(</span><span class="identifier">token</span><span class="otherpunctuation">.</span><span class="headdatatype">text</span><span class="otherpunctuation">)</span><span class="otherpunctuation">&nbsp;+</span><span class="string">&nbsp;"&lt;/span&gt;"</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outPlain</span><span class="otherpunctuation">&nbsp;+</span><span class="otherpunctuation">=</span><span class="identifier">&nbsp;token</span><span class="otherpunctuation">.</span><span class="headdatatype">text</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="otherpunctuation">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="newline"><br /></span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case</span><span class="string">&nbsp;"NEWLINE"</span><span class="otherpunctuation">&nbsp;-</span><span class="otherpunctuation">&gt;</span><span class="otherpunctuation">&nbsp;&lbrace;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outCodeHTML</span><span class="otherpunctuation">&nbsp;+</span><span class="otherpunctuation">=</span><span class="string">&nbsp;"&lt;span&nbsp;class=\""</span><span class="otherpunctuation">&nbsp;+</span><span class="identifier">&nbsp;token</span><span class="otherpunctuation">.</span><span class="headdatatype">type</span><span class="otherpunctuation">.</span><span class="methodname">toString</span><span class="otherpunctuation">(</span><span class="otherpunctuation">)</span><span class="otherpunctuation">.</span><span class="methodname">toLowerCase</span><span class="otherpunctuation">(</span><span class="otherpunctuation">)</span><span class="otherpunctuation">&nbsp;+</span><span class="string">&nbsp;"\"&gt;&lt;br&nbsp;/&gt;&lt;/span&gt;"</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outPlain</span><span class="otherpunctuation">&nbsp;+</span><span class="otherpunctuation">=</span><span class="string">&nbsp;"\n"</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="otherpunctuation">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="newline"><br /></span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case</span><span class="string">&nbsp;"TAB"</span><span class="otherpunctuation">&nbsp;-</span><span class="otherpunctuation">&gt;</span><span class="otherpunctuation">&nbsp;&lbrace;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outCodeHTML</span><span class="otherpunctuation">&nbsp;+</span><span class="otherpunctuation">=</span><span class="string">&nbsp;"&lt;span&nbsp;class=\""</span><span class="otherpunctuation">&nbsp;+</span><span class="identifier">&nbsp;token</span><span class="otherpunctuation">.</span><span class="headdatatype">type</span><span class="otherpunctuation">.</span><span class="methodname">toString</span><span class="otherpunctuation">(</span><span class="otherpunctuation">)</span><span class="otherpunctuation">.</span><span class="methodname">toLowerCase</span><span class="otherpunctuation">(</span><span class="otherpunctuation">)</span><span class="otherpunctuation">&nbsp;+</span><span class="string">&nbsp;"\"&gt;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/span&gt;"</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outPlain</span><span class="otherpunctuation">&nbsp;+</span><span class="otherpunctuation">=</span><span class="string">&nbsp;"\t"</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="otherpunctuation">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="newline"><br /></span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case</span><span class="string">&nbsp;"SPACE"</span><span class="otherpunctuation">&nbsp;-</span><span class="otherpunctuation">&gt;</span><span class="otherpunctuation">&nbsp;&lbrace;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outCodeHTML</span><span class="otherpunctuation">&nbsp;+</span><span class="otherpunctuation">=</span><span class="string">&nbsp;"&lt;span&nbsp;class=\""</span><span class="otherpunctuation">&nbsp;+</span><span class="identifier">&nbsp;token</span><span class="otherpunctuation">.</span><span class="headdatatype">type</span><span class="otherpunctuation">.</span><span class="methodname">toString</span><span class="otherpunctuation">(</span><span class="otherpunctuation">)</span><span class="otherpunctuation">.</span><span class="methodname">toLowerCase</span><span class="otherpunctuation">(</span><span class="otherpunctuation">)</span><span class="otherpunctuation">&nbsp;+</span><span class="string">&nbsp;"\"&gt;&nbsp;&lt;/span&gt;"</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;outPlain</span><span class="otherpunctuation">&nbsp;+</span><span class="otherpunctuation">=</span><span class="string">&nbsp;"&nbsp;"</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="otherpunctuation">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="newline"><br /></span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;default</span><span class="otherpunctuation">&nbsp;-</span><span class="otherpunctuation">&gt;</span><span class="keyword">&nbsp;System</span><span class="otherpunctuation">.</span><span class="identifier">err</span><span class="otherpunctuation">.</span><span class="methodname">println</span><span class="otherpunctuation">(</span><span class="string">"Unexpected&nbsp;enum:&nbsp;"</span><span class="otherpunctuation">&nbsp;+</span><span class="identifier">&nbsp;token</span><span class="otherpunctuation">.</span><span class="headdatatype">type</span><span class="otherpunctuation">.</span><span class="methodname">toString</span><span class="otherpunctuation">(</span><span class="otherpunctuation">)</span><span class="otherpunctuation">)</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="otherpunctuation">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="newline"><br /></span><span class="otherpunctuation">&nbsp;&nbsp;&nbsp;&nbsp;}</span><span class="newline"><br /></span><span class="identifier">&nbsp;&nbsp;&nbsp;&nbsp;outCodeHTML</span><span class="otherpunctuation">&nbsp;+</span><span class="otherpunctuation">=</span><span class="string">&nbsp;"&lt;/code&gt;"</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;return</span><span class="keyword">&nbsp;new</span><span class="identifier">&nbsp;String</span><span class="otherpunctuation">[</span><span class="otherpunctuation">]</span><span class="otherpunctuation">&lbrace;</span><span class="identifier">outCodeHTML</span><span class="otherpunctuation">,</span><span class="identifier">&nbsp;outCodeCSS</span><span class="otherpunctuation">,</span><span class="identifier">&nbsp;outPlain</span><span class="otherpunctuation">}</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="otherpunctuation">&nbsp;&nbsp;}</span><span class="newline"><br /></span><span class="newline"><br /></span><span class="keyword">&nbsp;&nbsp;private</span><span class="identifier">&nbsp;String</span><span class="methodname">&nbsp;cleanse</span><span class="otherpunctuation">(</span><span class="identifier">String</span><span class="identifier">&nbsp;text</span><span class="otherpunctuation">)</span><span class="otherpunctuation">&nbsp;&lbrace;</span><span class="newline"><br /></span><span class="keyword">&nbsp;&nbsp;&nbsp;&nbsp;return</span><span class="identifier">&nbsp;text</span><span class="otherpunctuation">.</span><span class="methodname">replaceAll</span><span class="otherpunctuation">(</span><span class="string">"[&amp;]"</span><span class="otherpunctuation">,</span><span class="string">&nbsp;"&amp;amp;"</span><span class="otherpunctuation">)</span><span class="otherpunctuation">.</span><span class="methodname">replaceAll</span><span class="otherpunctuation">(</span><span class="string">"[&nbsp;]"</span><span class="otherpunctuation">,</span><span class="string">&nbsp;"&amp;nbsp;"</span><span class="otherpunctuation">)</span><span class="otherpunctuation">.</span><span class="methodname">replaceAll</span><span class="otherpunctuation">(</span><span class="string">"[&lbrace;]"</span><span class="otherpunctuation">,</span><span class="string">&nbsp;"&amp;lbrace;"</span><span class="otherpunctuation">)</span><span class="otherpunctuation">.</span><span class="methodname">replaceAll</span><span class="otherpunctuation">(</span><span class="string">"[&lt;]"</span><span class="otherpunctuation">,</span><span class="string">&nbsp;"&amp;lt;"</span><span class="otherpunctuation">)</span><span class="otherpunctuation">.</span><span class="methodname">replaceAll</span><span class="otherpunctuation">(</span><span class="string">"[&gt;]"</span><span class="otherpunctuation">,</span><span class="newline"><br /></span><span class="string">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"&amp;gt;"</span><span class="otherpunctuation">)</span><span class="otherpunctuation">;</span><span class="newline"><br /></span><span class="otherpunctuation">&nbsp;&nbsp;}</span><span class="newline"><br /></span><span class="otherpunctuation">}</span><span class="newline"><br /></span></code></body>
+</html>

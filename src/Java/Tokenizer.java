@@ -15,33 +15,33 @@ public class Tokenizer {
 
   public Tokenizer() {
     String[] keys = new String[]{
-        "abstract", "assert", "boolean", "break", "byte", "case",
-        "catch", "char", "class", "continue", "const", "default",
-        "do", "double", "else", "enum", "exports", "extends", "final",
-        "finally", "float", "for", "goto", "if", "implements", "import",
-        "instanceof", "int", "interface", "long", "module", "native",
-        "new", "non-sealed", "package", "private", "protected", "public",
-        "requires", "return", "short", "static", "strictfp", "super",
-        "switch", "synchronized", "this", "throw", "throws", "transient",
-        "try", "var", "void", "volatile", "while", "yield", "sealed", "record",
-        "permits", "System"
-      };
+      "abstract", "assert", "boolean", "break", "byte", "case",
+      "catch", "char", "class", "continue", "const", "default",
+      "do", "double", "else", "enum", "exports", "extends", "final",
+      "finally", "float", "for", "goto", "if", "implements", "import",
+      "instanceof", "int", "interface", "long", "module", "native",
+      "new", "non-sealed", "package", "private", "protected", "public",
+      "requires", "return", "short", "static", "strictfp", "super",
+      "switch", "synchronized", "this", "throw", "throws", "transient",
+      "try", "var", "void", "volatile", "while", "yield", "sealed", "record",
+      "permits", "System"
+    };
     keywords.addAll(Arrays.asList(keys));
     String[] lit = new String[]{
-            "true", "false", "null"
+      "true", "false", "null"
     };
     literals.addAll(Arrays.asList(lit));
 
 
     String[] dataType = new String[]{
-            "Byte", "Short", "Integer", "Long", "Float",
-            "Double", "Boolean", "Character"
+      "Byte", "Short", "Integer", "Long", "Float",
+      "Double", "Boolean", "Character"
     };
     dataTypes.addAll(Arrays.asList(dataType));
 
 
     String[] classKeys = new String[]{
-            "class", "interface", "enum", "extends", "implements"
+      "class", "interface", "enum", "extends", "implements"
     };
     classKeywords.addAll(Arrays.asList(classKeys));
   }
@@ -103,15 +103,14 @@ public class Tokenizer {
         } else {
           switch (currentChar) {
             case ' ':
-              tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.SPACE));
-              break;
+            case '\t':
+              col++;
+              current++;
+              continue;
             case '\n':
               tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.NEWLINE));
               line++;
               col = 0;
-              break;
-            case '\t':
-              tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.TAB));
               break;
             case '@':
               annotation();

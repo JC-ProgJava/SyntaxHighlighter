@@ -22,28 +22,28 @@ public class SyntaxHighlighter {
 
       System.out.println("If the below tests output false, please file an issue in the Github repository.");
       System.out.println("Input matches output: " + out.toString().trim().equals(code.trim()));
-      Parser parser = new Parser(tokens, "AtomOneDark");
+      Parser parser = new Parser(tokens, "Normal");
       String[] output = parser.parse();
       System.out.println("Parser matches input: " + output[2].trim().equals(code.trim()));
       System.out.println("-".repeat(40));
 
       String codeHTMLAndCSS = """
-              <!DOCTYPE html>
-              <html>
-              <head>
-              <title>Page Title</title>
-              <style>""" +
-              output[1] +
-              """
-                      </style>
-                      </head>
-                      <body>
-                      """
-              + output[0] +
-              """
-                      </body>
-                      </html>
-                      """;
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <title>Page Title</title>
+        <style>""" +
+        output[1] +
+        """
+          </style>
+          </head>
+          <body>
+          """
+        + output[0] +
+        """
+          </body>
+          </html>
+          """;
 
       FileWriter writer = new FileWriter("index.html");
       writer.write(codeHTMLAndCSS);

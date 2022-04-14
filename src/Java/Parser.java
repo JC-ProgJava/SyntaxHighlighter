@@ -34,7 +34,7 @@ public class Parser {
     });
     styles.put("Exotic", new String[]{
       "inherit", // code background-color
-      "#136F75; font-weight: bold", // keyword
+      "#136F75", // keyword
       "#C3301E", // identifier
       "#1F5D15", // number
       "#8A2428", // string
@@ -50,7 +50,7 @@ public class Parser {
       "#8A07B3", // methodname
       "#8A2428", // comment
       "#C3301E", // datatype
-      "#136F75; font-weight: bold", // literal
+      "#136F75", // literal
       "#C3301E", // classname
     });
     styles.put("AtomOneDark", new String[]{

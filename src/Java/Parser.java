@@ -84,7 +84,7 @@ public class Parser {
           background-color: %s;
         }
         
-        span {
+        code span {
           display: inline;
           white-space: pre;
         }

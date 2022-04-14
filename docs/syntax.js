@@ -32,7 +32,7 @@ class Parser {
         this.tokens = tokens;
         this.styles["Normal"] = [
             "rgb(244, 242, 240)",
-            "#003399; font-weight: bold",
+            "#003399",
             "black",
             "#1740E6",
             "#106B10",
@@ -48,12 +48,12 @@ class Parser {
             "black",
             "#106B10",
             "black",
-            "#003399; font-weight: bold",
+            "#003399",
             "black",
         ];
         this.styles["Exotic"] = [
             "inherit",
-            "#136F75; font-weight: bold",
+            "#136F75",
             "#C3301E",
             "#1F5D15",
             "#8A2428",
@@ -69,7 +69,7 @@ class Parser {
             "#8A07B3",
             "#8A2428",
             "#C3301E",
-            "#136F75; font-weight: bold",
+            "#136F75",
             "#C3301E",
         ];
         this.styles["AtomOneDark"] = [

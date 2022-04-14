@@ -74,7 +74,18 @@ public class Tokenizer {
 
     while (notAtEnd()) {
       char currentChar = sourceCode.charAt(current);
-      if (isAlphabet(currentChar)) {
+      if (isNumerical(currentChar)) {
+        while (notAtEnd()) {
+          if (isNumerical(peek()) || peek() == '.') {
+            col++;
+            current++;
+          } else {
+            break;
+          }
+        }
+
+        tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.NUMBER));
+      } else if (isAlphabet(currentChar)) {
         while (notAtEnd() && isIdentifierEnding(peek())) {
           col++;
           current++;
@@ -89,18 +100,6 @@ public class Tokenizer {
           tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.IDENTIFIER));
         }
       } else {
-        if (isNumerical(currentChar)) {
-          while (notAtEnd()) {
-            if (isNumerical(peek()) || peek() == '.') {
-              col++;
-              current++;
-            } else {
-              break;
-            }
-          }
-
-          tokens.add(new Token(sourceCode.substring(start, current + 1), line, col, TokenType.NUMBER));
-        } else {
           switch (currentChar) {
             case ' ':
             case '\t':
@@ -181,7 +180,6 @@ public class Tokenizer {
               System.err.println("Could not interpret character: '" + currentChar + "'. [ln: " + line + "]");
               break;
           }
-        }
       }
       col++;
       current++;
@@ -338,6 +336,6 @@ public class Tokenizer {
   }
 
   private boolean isNumerical(char currentChar) {
-    return String.valueOf(currentChar).matches("[0-9]");
+    return String.valueOf(currentChar).matches("[0-9 ]");
   }
 }
